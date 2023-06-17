@@ -1,2 +1,3 @@
 dist/fengari-web.js -linguist-detectable
 dist/bundle.js -linguist-detectable
+dist/* linguist-vendored

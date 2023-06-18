@@ -1,4 +1,5 @@
-local grid = require "grid"
+local grid = require "lua.grid"
+local inspect = require "lua.inspect"
 
 -- ------------------------------------------------------------------------------------
 -- GLOBAL

@@ -1,14 +1,15 @@
-local interpreter = require "vm"
-local grid = require "grid"
+local interpreter = require "lua.vm"
+local grid = require "lua.grid"
 
 local M = {}
-local sz = 16
+local sz = 128 * 2
 
 function M.init() grid.init_grid(sz) end
 
 function M.render(code, file_name)
 
   local file = ""
+  local done = false
 
   file = file .. ("P1\n# " .. file_name .. "\n" .. sz .. " " .. sz .. "\n")
 
@@ -26,13 +27,14 @@ function M.render(code, file_name)
       opt["y"] = y
 
       local val = interpreter.EXEC(code, opt)
-      -- file:write(val)
-      file = file .. val
+      file = file .. val .. " "
       file = file .. (x == sz and "\n" or "")
     end
   end
 
+  print("from render function")
   print(file)
+  return file
 end
 
 return M

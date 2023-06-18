@@ -1,4 +1,4 @@
-local matrix = require "matrix"
+local matrix = require "lua.matrix"
 
 local M = {}
 M.grid = {}

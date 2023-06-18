@@ -6,20 +6,53 @@
     <meta name="description" content="flure" />
     <meta name="author" content="Daily Dev Tips" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="pbm2canvas.js" type="text/javascript"></script>
     <script src="fengari-web.js" type="text/javascript"></script>
   </head>
-  <body class="h-screen p-8 bg-white dark:bg-gray-900 antialiased">
+  <body class="h-screen p-12 bg-white dark:bg-gray-900 antialiased">
 
-    <script>
-      // function mySubmitFunction() {
-      //   return false;
-      // }
+    <script type="text/javascript">
+
+      window.onload = function(){
+        console.log("print onluad")
+        emptyCanvasPlacehoder()
+      }
+
+      function emptyCanvasPlacehoder(){
+        let width = 512
+        let height = 256
+        let canvas = document.getElementById("flure_canvas")
+        let ctx = canvas.getContext("2d");
+
+        canvas.height = height * 4;
+        canvas.width = width * 4;
+        // ctx.scale(4, 4);
+        ctx.font = "20px monospace";
+        ctx.fillText("flure playground", 40, 50);
+
+        ctx.font = "14px monospace";
+        ctx.fillText("a playground for \"flure\", a stack-based programming language", 40, 30*3);
+        ctx.fillText("to create binary graphic (1-bit).", 40, 30*4);
+      }
+
+      function handleOnClick() {
+        console.log("flure_value------ : ", window.flure_value)
+        let canvas = document.getElementById("flure_canvas")
+        if(!window.flure_value) return false
+        pbm2canvas(window.flure_value, canvas)
+      }
+
+      function runREPL(e){
+        console.log("runREPL ") 
+        return false
+      }
     </script>
 
     <div class="flex h-full">
-      <div class="relative bg-gray-200 flex justify-center items-center w-full h-full  rounded-xl overflow-hidden">
-        <div class="w-[500px] h-[500px] object-contain object-center rounded-2xl overflow-hidden">
-          <img class="w-full h-full object-contain object-center" src="example_img.png" alt="img">
+      <div class="relative  flex justify-center items-center w-full h-full  rounded-xl overflow-hidden">
+        <div class="w-full h-full object-contain object-center rounded-xl overflow-hidden border border-gray-200">
+          <!-- <img class="w-full h-full object-contain object-center" src="example_img.png" alt="img"> -->
+          <canvas id="flure_canvas" class="absolute z-10 rounded-xl "/>
         </div>
       </div>
       <div class="flex flex-col pl-12">
@@ -32,26 +65,21 @@
             <li>arithmatics = <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
             <li>bitwise = <code>&</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></li>
             <li>stack = <code>pop</code>, <code>push</code></li>
-            <li>core = (<code> -1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
-            <div class="ml-4">
-              <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
-              <li><code>and</code> , <code>or</code></li>
-              <li><code>&gt;</code>(greater_than), <code>&lt;</code>(less_than)</li>
-              <li><code>dup</code>(duplicate)</li>
-              <li><code>swap</code></li>
-              <li><code>2dup</code>(double duplicate)</li>
-              <li><code>rot</code>(rotate)</li>
-              <li><code>abs</code>(absolute number)</li>
-              <li><code>%</code>(modulo)</li>
-              <li><code>!</code>(cast to 0 or 1)</li>
-            </div>
             <li>show stack = <code>show</code></li>
             <li>to exit = <code>bye</code></li>
             <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term) = <code> : <function_name> &lt;...args&gt; ; </code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
             <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
-            <li>basic control flow <code>&lt;condition&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
-            <li>comments = <code>( &lt;...any_comments_here&gt; )</code></li>
+            <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
+            <li>comments = <code>( &lt;...comments&gt; )</code></li>
             <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code> function.</li>
+            <li>core = (<code>-1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
+            <div class="ml-4">
+              <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
+              <li><code>and</code> , <code>or</code> , <code>&gt;</code>(greater_than), <code>&lt;</code>(less_than)</li>
+              <li><code>dup</code>(duplicate) , <code>2dup</code>(double duplicate) , <code>swap</code> , <code>rot</code>(rotate)</li>
+              <li><code>abs</code>(absolute number)</li>
+              <li><code>%</code>(modulo), <code>!</code>(cast to 0 or 1)</li>
+            </div>
 
             <br/>
             <h1 class="text-xl font-bold">Examples</h1>
@@ -65,16 +93,26 @@
 
         </div>
 
-        <form id="form_submit" class="flex flex-shrink-0">
+        <!-- <div id="flure_console" class="bg-gray-100 w-full h-12 rounded-md p-2 text-xs text-gray-600"></div> -->
+
+        <div class="repl bg-gray-100 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-[200px]">
+          <code id="fengari-console"></code>
+          <div class="fengari-input-container self-end w-full">
+              <label id="fengari-prompt" for="fengari-input"> > </label>
+              <textarea class="w-full" id="fengari-input" rows="1" placeholder="Type some flure here..."></textarea>
+          </div>
+      </div>
+
+        <!-- <form id="form_submit" class="flex flex-shrink-0">
           <div
-            class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
+            class="w-full mt-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600"
           >
             <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
               <label for="comment" class="sr-only">flure codes</label>
               <textarea
                 id="flure_code"
-                rows="4"
-                class="w-full px-0 text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
+                rows="2"
+                class="w-full px-0 text-sm text-gray-900 bg-white border-0 focus:outline-none dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
                 placeholder="try flure code here..."
                 required
               ></textarea>
@@ -83,19 +121,28 @@
               class="flex items-center justify-between px-3 py-2 border-t dark:border-gray-600"
             >
               <button
-                id="form_btn"
+                id="form_btn_repl"
                 type="submit"
                 class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-blue-700 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-blue-800"
               >
-                run code
+                run REPL
+              </button>
+              <button
+                id="form_btn"
+                type="submit"
+                onclick="handleOnClick()"
+                class="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-green-400 rounded-lg focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-900 hover:bg-green-800"
+              >
+                compute image
               </button>
             </div>
           </div>
-        </form>
+        </form> -->
       </div>
     </div>
 
-    <script src="flure.lua" type="application/lua" async></script>
+    <script src="lua/flure.lua" type="application/lua" async></script>
+    <script src="lua/web-cli.lua" type="application/lua" async></script>
     <script src="bundle.js"></script>
   </body>
 </html>

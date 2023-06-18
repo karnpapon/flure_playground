@@ -3,8 +3,9 @@ const supportedFormats = ["P1", "P2"];
 function draw(canvas, image) {
   let { format, height, width } = image;
   let ctx = canvas.getContext("2d");
-  canvas.height = height;
-  canvas.width = width;
+  canvas.height = height * 4;
+  canvas.width = width * 4;
+  ctx.scale(4, 4);
   switch (format) {
     case "P1":
       drawPBM(ctx, image);
@@ -90,7 +91,7 @@ function parseLine(line) {
   return line.replace(/\s+/g, "|").replace(/^\|/, "").split("|").map(Number);
 }
 
-export default function pbm2canvas(pbmString, canvas) {
+function pbm2canvas(pbmString, canvas) {
   let parsed = parse(pbmString);
   if (!parsed.format) {
     throw new Error("Could not determine format");

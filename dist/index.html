@@ -14,12 +14,23 @@
     <script type="text/javascript">
 
       window.onload = function(){
-        emptyCanvasPlacehoder()
-        let output = document.getElementById("fengari-console")
 
-        output.addEventListener("flure_image_result_starting", function(){
-          // console.log("flure_image_result_starting")
-        })
+        emptyCanvasPlacehoder()
+
+        let output = document.getElementById("fengari-console")
+        
+
+        function save(computed_txts){
+          console.log("computed_txts", computed_txts)
+          if(!computed_txts) return false
+          const bb = new Blob([computed_txts ], { type: 'text/plain' });
+          const a = document.createElement('a');
+          a.download = 'download.pbm';
+          a.href = window.URL.createObjectURL(bb);
+          a.click();
+        }
+
+        output.addEventListener("flure_image_result_starting", function(){ })
 
         output.addEventListener("flure_image_result_end", function(){
             let canvas = document.getElementById("flure_canvas")
@@ -27,6 +38,14 @@
             let loading_elem = document.getElementById("canvas_loading")
             loading_elem.style.display = "none"
             pbm2canvas(window.flure_value, canvas) 
+            
+            let computed_txts = window.flure_value
+            let save_btn = document.getElementById("save-btn")
+            save_btn.removeEventListener("click", save)
+            save_btn.disabled = false
+            save_btn.style.backgroundColor = "black"
+            save_btn.style.color = "white"
+            save_btn.addEventListener("click", () => save(computed_txts))
         })
       }
 
@@ -99,9 +118,14 @@
             <code id="fengari-console"></code>
             <div class="fengari-input-container self-end w-full">
                 <label id="fengari-prompt" for="fengari-input"> > </label>
-                <textarea class="w-full" id="fengari-input" rows="1" placeholder="Type some flure code here..."></textarea>
+                <textarea class="w-full" id="fengari-input" rows="1" placeholder="try here, for quick tutorial: `x y ^ 5 % !` then ShiftEnter"></textarea>
             </div>
         </div>
+
+        <div class="w-1/2 mt-4">
+          <button id="save-btn" type="button" disabled class="py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200  focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">save image(.pbm)</button>
+        </div>
+
       </div>
 
       </div>

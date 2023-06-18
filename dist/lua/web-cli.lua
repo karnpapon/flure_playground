@@ -74,7 +74,7 @@ local function doComputeImage()
   end
   vm.build_mode = true
   drawer.init()
-  window:setTimeout(function() window.flure_value = drawer.render(line, "output_img")  end, 200)
+  window:setTimeout(function() drawer.render(line, "output_img")  end, 200)
 end
 
 local function doREPL()
@@ -128,6 +128,7 @@ function input:onkeydown(e)
         historyIndex = nil
         local loading_elem = document:getElementById("canvas_loading")
         loading_elem.style.display = "flex"
+        loading_elem.style.flexDirection = "column"
         doComputeImage()
         return false
     elseif key == "ArrowUp" or key == "Up" then

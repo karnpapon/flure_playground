@@ -19,9 +19,9 @@
 
         let output = document.getElementById("fengari-console")
 
-        function save(computed_txts){
-          if(!computed_txts) return false
-          const bb = new Blob([computed_txts ], { type: 'text/plain' });
+        function save(){
+          if(!window.flure_value) return false
+          const bb = new Blob([window.flure_value ], { type: 'text/plain' });
           const a = document.createElement('a');
           a.download = 'flure_image.pbm';
           a.href = window.URL.createObjectURL(bb);
@@ -37,13 +37,13 @@
             loading_elem.style.display = "none"
             pbm2canvas(window.flure_value, canvas) 
             
-            let computed_txts = window.flure_value
+            // let computed_txts = window.flure_value
             let save_btn = document.getElementById("save-btn")
             save_btn.removeEventListener("click", save)
             save_btn.disabled = false
             save_btn.style.backgroundColor = "black"
             save_btn.style.color = "white"
-            save_btn.addEventListener("click", () => save(computed_txts))
+            save_btn.addEventListener("click", () => save())
         })
       }
 
@@ -70,7 +70,10 @@
       <div class="flex h-full -translate-y-4">
         <div class="relative flex justify-center items-center h-auto  rounded-xl overflow-hidden w-[70%]">
           <div class="w-full h-full object-contain object-center rounded-xl overflow-hidden">
-            <div id="canvas_loading" class="hidden w-full h-full justify-center items-center text-xl"><p>loading...</p></div>
+            <div id="canvas_loading" class="hidden w-full h-full justify-center items-center text-xl">
+              <p>loading...</p>
+              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_nOfF{animation:spinner_qtyZ 2s cubic-bezier(0.36,.6,.31,1) infinite}.spinner_fVhf{animation-delay:-.5s}.spinner_piVe{animation-delay:-1s}.spinner_MSNs{animation-delay:-1.5s}@keyframes spinner_qtyZ{0%{r:0}25%{r:3px;cx:4px}50%{r:3px;cx:12px}75%{r:3px;cx:20px}100%{r:0;cx:20px}}</style><circle class="spinner_nOfF" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3"/></svg>
+            </div>
             <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full"/>
           </div>
         </div>

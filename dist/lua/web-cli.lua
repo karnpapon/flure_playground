@@ -1,5 +1,6 @@
 local js = require "js"
 local vm = require "lua.vm"
+local drawer = require "lua.drawer"
 
 -- Save references to lua baselib functions used
 local _G = _G
@@ -9,6 +10,7 @@ local tostring = tostring
 -- local traceback = debug.traceback
 -- local xpcall = xpcall
 
+local window = js.global
 local document = js.global.document
 
 local output = document:getElementById("fengari-console")
@@ -54,6 +56,25 @@ local function run_flure_repl(line)
   elseif return_code == 2 then
     return "Due to error, input was not processed."
   end
+end
+
+local function doComputeImage()
+  print("computing a (1-bit) binary graphic image...")
+  if input.value.length == 0 then
+    print("empty input value")
+    return
+  end
+
+  local line = input.value
+  if history[#history] ~= line then
+      tinsert(history, line)
+      if #history > historyLimit then
+          tremove(history, 1)
+      end
+  end
+  vm.build_mode = true
+  drawer.init()
+  window:setTimeout(function() window.flure_value = drawer.render(line, "output_img")  end, 200)
 end
 
 local function doREPL()
@@ -103,6 +124,12 @@ function input:onkeydown(e)
         historyIndex = nil
         doREPL()
         return false
+    elseif key == "Enter" and e.shiftKey then
+        historyIndex = nil
+        local loading_elem = document:getElementById("canvas_loading")
+        loading_elem.style.display = "flex"
+        doComputeImage()
+        return false
     elseif key == "ArrowUp" or key == "Up" then
         if historyIndex then
             if historyIndex > 1 then
@@ -136,9 +163,9 @@ function input:onkeydown(e)
         and not e.isComposing then
         -- Ctrl+L clears screen like you would expect in a terminal
         output.innerHTML = ""
-        -- _G.print(_G._COPYRIGHT)
+        _G.print("[ArrowUp/ArrowDown]: get previous terminal history\n[Ctrl+L]: to clear a console\n[Enter]: run REPL\n[ShiftEnter]: compute an 1-bit graphic image.\n\n")
         return false
     end
 end
 
--- _G.print(_G._COPYRIGHT)
+_G.print("[ArrowUp/ArrowDown]: get previous terminal history\n[Ctrl+L]: to clear a console\n[Enter]: run REPL\n[ShiftEnter]: compute an 1-bit graphic image.\n\n")

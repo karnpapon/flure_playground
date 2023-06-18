@@ -1,15 +1,28 @@
+local js = require "js"
 local interpreter = require "lua.vm"
 local grid = require "lua.grid"
 
 local M = {}
 local sz = 128 * 2
 
+local window = js.global
+local document = window.document
+local output = document:getElementById("fengari-console")
+
 function M.init() grid.init_grid(sz) end
+
+local function triggerEvent(el, type)
+  local e = document:createEvent("HTMLEvents")
+  e:initEvent(type, false, true)
+  el:dispatchEvent(e)
+end
 
 function M.render(code, file_name)
 
   local file = ""
   local done = false
+
+  triggerEvent(output, "flure_image_result_starting")
 
   file = file .. ("P1\n# " .. file_name .. "\n" .. sz .. " " .. sz .. "\n")
 
@@ -32,9 +45,9 @@ function M.render(code, file_name)
     end
   end
 
-  print("from render function")
-  print(file)
-  return file
+  window.flure_value = file
+  triggerEvent(output, "flure_image_result_end")
+  -- return file
 end
 
 return M

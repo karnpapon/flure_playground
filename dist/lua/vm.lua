@@ -567,8 +567,10 @@ function EVAL(input_array, compiled, options)
           elseif v == ">>" then
             op_bit_rshift()
           elseif v == "x" then
+            if not options then return end
             op_special_x(options["x"], options["y"])
           elseif v == "y" then
+            if not options then return end
             op_special_y(options["x"], options["y"])
           elseif v == "if" then
             op_if_if()

@@ -18,14 +18,12 @@
         emptyCanvasPlacehoder()
 
         let output = document.getElementById("fengari-console")
-        
 
         function save(computed_txts){
-          console.log("computed_txts", computed_txts)
           if(!computed_txts) return false
           const bb = new Blob([computed_txts ], { type: 'text/plain' });
           const a = document.createElement('a');
-          a.download = 'download.pbm';
+          a.download = 'flure_image.pbm';
           a.href = window.URL.createObjectURL(bb);
           a.click();
         }

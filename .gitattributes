@@ -1,3 +1,4 @@
-dist/lua/* linguist-vendored=true
-dist/fengari-web.js linguist-vendored=false
-dist/bundle.js linguist-vendored=false
+./dist linguist-vendored
+./dist/fengari-web.js -linguist-vendored
+./dist/bundle.js -linguist-vendored
+./dist/lua/* linguist-vendored

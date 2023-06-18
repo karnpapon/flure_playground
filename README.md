@@ -1,7 +1,7 @@
-# `flure_website`
+# `flure_playground`
 
-a website for testing `flure`
+playground for [flure language](https://github.com/karnpapon/flure) built with `Lua` + `Fengari` + `TailwindCSS` + `Webpack`
 
 ### build
 
-- `git clone -r submodule `
+- `yarn build`

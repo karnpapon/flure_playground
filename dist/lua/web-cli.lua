@@ -1,6 +1,7 @@
 local js = require "js"
 local vm = require "lua.vm"
 local drawer = require "lua.drawer"
+local interpreter = require "lua.vm"
 
 -- Save references to lua baselib functions used
 local _G = _G
@@ -58,7 +59,31 @@ local function run_flure_repl(line)
   end
 end
 
+local sz = 128*2;
+local file = ""
+
+local function render_chunks(code, iter)
+  if iter ~= sz then
+    window:setTimeout(function()
+      for x = 1, sz, 1 do
+        local opt = {}
+        opt["x"] = x
+        opt["y"] = iter
+        local val = interpreter.EXEC(code, opt)
+        file = file .. val .. " "
+        file = file .. (x == sz and "\n" or "")
+      end
+
+      render_chunks(code, iter + 1);
+    end, 0);
+  else
+    window.flure_value = file
+    triggerEvent(output, "flure_image_result_end")
+  end
+end
+
 local function doComputeImage()
+  file = ""
   print("computing a (1-bit) binary graphic image...")
   if input.value.length == 0 then
     print("empty input value")
@@ -74,7 +99,9 @@ local function doComputeImage()
   end
   vm.build_mode = true
   drawer.init()
-  window:setTimeout(function() drawer.render(line, "output_img")  end, 200)
+  file = file .. ("P1\n# " .. "output_img" .. "\n" .. sz .. " " .. sz .. "\n")
+  -- window:setTimeout(function() drawer.render(line, "output_img")  end, 200)
+  render_chunks(line, 1)
 end
 
 local function doREPL()

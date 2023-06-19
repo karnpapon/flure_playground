@@ -30,20 +30,25 @@
           a.click();
         }
 
-        output.addEventListener("flure_image_result_starting", function(){ })
+        output.addEventListener("flure_image_result_starting", function(){
+          let loading_elem = document.getElementById("canvas_loading")
+          loading_elem.style.display = "block"
+         })
 
-        output.addEventListener("flure_image_result_end", function(){
+        output.addEventListener("flure_image_result_processing", function(e){
             let canvas = document.getElementById("flure_canvas")
             if(!window.flure_value) return false
-            let loading_elem = document.getElementById("canvas_loading")
-            loading_elem.style.display = "none"
-            pbm2canvas(window.flure_value, canvas) 
-            
-            let save_btn = document.getElementById("save-btn")
-            save_btn.removeEventListener("click", save)
-            save_btn.disabled = false
-            save_btn.style.backgroundColor = "white"
-            save_btn.addEventListener("click", () => save())
+            pbm2canvas(window.flure_value, canvas, e.detail) 
+        })
+
+        output.addEventListener("flure_image_result_end", function(){
+          let loading_elem = document.getElementById("canvas_loading")
+          loading_elem.style.display = "none"
+          let save_btn = document.getElementById("save-btn")
+          save_btn.removeEventListener("click", save)
+          save_btn.disabled = false
+          save_btn.style.backgroundColor = "white"
+          save_btn.addEventListener("click", () => save())
         })
       }
 
@@ -70,9 +75,6 @@
       <div class="flex h-full">
         <div class="relative flex justify-center items-center h-auto  rounded-xl overflow-hidden w-[70%]">
           <div class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden">
-            <div id="canvas_loading" class="hidden w-full h-full justify-center items-center text-xl">
-              <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_nOfF{animation:spinner_qtyZ 2s cubic-bezier(0.36,.6,.31,1) infinite}.spinner_fVhf{animation-delay:-.5s}.spinner_piVe{animation-delay:-1s}.spinner_MSNs{animation-delay:-1.5s}@keyframes spinner_qtyZ{0%{r:0}25%{r:3px;cx:4px}50%{r:3px;cx:12px}75%{r:3px;cx:20px}100%{r:0;cx:20px}}</style><circle class="spinner_nOfF" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3"/></svg>
-            </div>
             <div class="absolute left-0 bottom-0 z-[99] mb-2 ml-2">
               <button id="save-btn" type="button" disabled class="inset-0 py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200  focus:z-10 focus:ring-4 focus:ring-gray-200 ">
                 <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)">
@@ -127,6 +129,9 @@
             </div>
         </div>
         <div class="pt-4 bottom-0 left-0 w-full dark:bg-gray-700 md:flex md:items-center md:justify-between">
+          <div id="canvas_loading" class="hidden -translate-y-2 h-[10px] text-xl">
+            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_nOfF{animation:spinner_qtyZ 2s cubic-bezier(0.36,.6,.31,1) infinite}.spinner_fVhf{animation-delay:-.5s}.spinner_piVe{animation-delay:-1s}.spinner_MSNs{animation-delay:-1.5s}@keyframes spinner_qtyZ{0%{r:0}25%{r:3px;cx:4px}50%{r:3px;cx:12px}75%{r:3px;cx:20px}100%{r:0;cx:20px}}</style><circle class="spinner_nOfF" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3"/></svg>
+          </div>
           <div class="w-full flex mt-4 space-x-6 justify-end md:mt-0">
             <span class="text-xs  text-gray-500 dark:text-gray-300 sm:text-center">MIT License, 2023, Bangkok Thailand  <a target="_blank" class="underline" href="https://github.com/karnpapon/flure">https://github.com/karnpapon/flure</a></span>
           </div>

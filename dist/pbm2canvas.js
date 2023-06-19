@@ -1,25 +1,31 @@
 const supportedFormats = ["P1", "P2"];
 
-function draw(canvas, image) {
+function draw(canvas, image, current_y) {
   let { format, height, width } = image;
   let ctx = canvas.getContext("2d");
-  canvas.height = height * 3;
+  canvas.height = height * 3 - 20;
   canvas.width = width * 3;
   ctx.scale(3, 3);
   switch (format) {
     case "P1":
-      drawPBM(ctx, image);
+      drawPBM(ctx, image, current_y);
       break;
     case "P2":
-      drawPGM(ctx, image);
+      drawPGM(ctx, image, current_y);
       break;
   }
 }
 
-function drawPBM(ctx, { height, width, data }) {
-  for (let y = 0; y < height; y++) {
+function drawPBM(ctx, { height, width, data }, current_y) {
+  for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
       if (data[y][x] === 1) {
+        // if (x % 2 || y % 2) {
+        //   ctx.fillStyle = "red";
+        //   ctx.fillRect(x + 1, y + 1, 1, 1);
+        // }
+
+        ctx.fillStyle = "black";
         ctx.fillRect(x, y, 1, 1);
       }
     }
@@ -91,7 +97,7 @@ function parseLine(line) {
   return line.replace(/\s+/g, "|").replace(/^\|/, "").split("|").map(Number);
 }
 
-function pbm2canvas(pbmString, canvas) {
+function pbm2canvas(pbmString, canvas, current_y) {
   let parsed = parse(pbmString);
   if (!parsed.format) {
     throw new Error("Could not determine format");
@@ -99,6 +105,6 @@ function pbm2canvas(pbmString, canvas) {
   if (!canvas) {
     canvas = document.createElement("canvas");
   }
-  draw(canvas, parsed);
+  draw(canvas, parsed, current_y);
   return canvas;
 }

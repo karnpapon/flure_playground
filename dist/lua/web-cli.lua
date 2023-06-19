@@ -25,6 +25,12 @@ local function triggerEvent(el, type)
     el:dispatchEvent(e)
 end
 
+local function triggerCustomEvent(el, type, value )
+  local e = document:createEvent("CustomEvent")
+  e:initCustomEvent(type, false, true, value)
+  el:dispatchEvent(e)
+end
+
 local history = {}
 local historyIndex = nil
 local historyLimit = 100
@@ -63,6 +69,7 @@ end
 local sz = 128*2;
 local file = ""
 
+-- wrapped in setTimeout to prevent blocking UI thread issue.
 local function render_chunks(code, iter)
   if iter ~= sz then
     window:setTimeout(function()
@@ -77,8 +84,9 @@ local function render_chunks(code, iter)
 
       render_chunks(code, iter + 1);
     end, 0);
-  else
     window.flure_value = file
+    triggerCustomEvent(output, "flure_image_result_processing", iter)
+  else
     print("《PROCESS_END》: done (click icon to save .pbm file).")
     triggerEvent(output, "flure_image_result_end")
   end
@@ -101,8 +109,8 @@ local function doComputeImage()
   end
   vm.build_mode = true
   drawer.init()
+  triggerEvent(output, "flure_image_result_starting")
   file = file .. ("P1\n# " .. "output_img" .. "\n" .. sz .. " " .. sz .. "\n")
-  -- window:setTimeout(function() drawer.render(line, "output_img")  end, 200)
   render_chunks(line, 1)
 end
 
@@ -156,9 +164,9 @@ function input:onkeydown(e)
         return false
     elseif key == "Enter" and e.shiftKey then
         historyIndex = nil
-        local loading_elem = document:getElementById("canvas_loading")
-        loading_elem.style.display = "flex"
-        loading_elem.style.flexDirection = "column"
+        -- local loading_elem = document:getElementById("canvas_loading")
+        -- loading_elem.style.display = "flex"
+        -- loading_elem.style.flexDirection = "column"
         doComputeImage()
         return false
     elseif key == "ArrowUp" or key == "Up" then

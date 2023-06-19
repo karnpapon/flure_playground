@@ -19,6 +19,7 @@
     "css-loader": "^6.8.1",
     "fengari-loader": "^0.0.1",
     "fengari-web": "^0.1.4",
+    "file-loader": "^6.2.0",
     "postcss": "^8.4.24",
     "postcss-loader": "^7.3.3",
     "postcss-preset-env": "^8.5.0",

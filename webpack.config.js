@@ -12,7 +12,7 @@ module.exports = {
       directory: path.resolve(__dirname, "dist"),
     },
     port: 3000,
-    open: true,
+    open: false,
     hot: true,
     compress: true,
     historyApiFallback: true,
@@ -28,6 +28,13 @@ module.exports = {
         test: /\.css$/i,
         include: path.resolve(__dirname, "src"),
         use: ["style-loader", "css-loader", "postcss-loader"],
+      },
+      {
+        test: /\.(png|jpg|jpeg|gif)$/,
+        loader: "file-loader",
+        options: {
+          name: "/public/[name].[ext]",
+        },
       },
     ],
   },

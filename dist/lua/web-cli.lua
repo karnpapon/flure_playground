@@ -13,9 +13,9 @@ local tostring = tostring
 local window = js.global
 local document = js.global.document
 
-local output = document:getElementById("fengari-console")
-local prompt = document:getElementById("fengari-prompt")
-local input = document:getElementById("fengari-input")
+local output = document:getElementById("flure-console")
+local prompt = document:getElementById("flure-prompt")
+local input = document:getElementById("flure-input")
 assert(output and prompt and input)
 
 local function triggerEvent(el, type)

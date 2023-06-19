@@ -7,7 +7,7 @@ local sz = 128 * 2
 
 local window = js.global
 local document = window.document
-local output = document:getElementById("fengari-console")
+local output = document:getElementById("flure-console")
 
 function M.init() grid.init_grid(sz) end
 
@@ -20,7 +20,7 @@ end
 function M.render(code, file_name)
 
   local file = ""
-  local done = false
+  -- local done = false
 
   triggerEvent(output, "flure_image_result_starting")
 

@@ -4,19 +4,18 @@
     <meta charset="utf-8" />
     <title>flure playground</title>
     <meta name="description" content="flure" />
-    <meta name="author" content="Daily Dev Tips" />
+    <meta name="author" content="karnpapon boonput" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="pbm2canvas.js" type="text/javascript"></script>
   </head>
   <body>
 
     <script type="text/javascript">
-
       window.onload = function(){
 
         emptyCanvasPlacehoder()
 
-        let output = document.getElementById("fengari-console")
+        let output = document.getElementById("flure-console")
 
         function save(){
           if(!window.flure_value) return false
@@ -40,8 +39,8 @@
             let save_btn = document.getElementById("save-btn")
             save_btn.removeEventListener("click", save)
             save_btn.disabled = false
-            save_btn.style.backgroundColor = "black"
-            save_btn.style.color = "white"
+            save_btn.style.backgroundColor = "white"
+            // save_btn.style.color = "white"
             save_btn.addEventListener("click", () => save())
         })
       }
@@ -68,10 +67,15 @@
     <div class="h-screen p-10 bg-white dark:bg-gray-900 antialiased flex-col">
       <div class="flex h-full -translate-y-4">
         <div class="relative flex justify-center items-center h-auto  rounded-xl overflow-hidden w-[70%]">
-          <div class="w-full h-full object-contain object-center rounded-xl overflow-hidden">
+          <div class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden">
             <div id="canvas_loading" class="hidden w-full h-full justify-center items-center text-xl">
               <p>loading...</p>
               <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_nOfF{animation:spinner_qtyZ 2s cubic-bezier(0.36,.6,.31,1) infinite}.spinner_fVhf{animation-delay:-.5s}.spinner_piVe{animation-delay:-1s}.spinner_MSNs{animation-delay:-1.5s}@keyframes spinner_qtyZ{0%{r:0}25%{r:3px;cx:4px}50%{r:3px;cx:12px}75%{r:3px;cx:20px}100%{r:0;cx:20px}}</style><circle class="spinner_nOfF" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3"/></svg>
+            </div>
+            <div class="absolute left-0 bottom-0 z-[99] mb-2 ml-2">
+              <button id="save-btn" type="button" disabled class="inset-0 py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200  focus:z-10 focus:ring-4 focus:ring-gray-200 ">
+                <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)">
+              </button>
             </div>
             <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full"/>
           </div>
@@ -115,17 +119,12 @@
           </div>
   
           <div class="repl bg-gray-100 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-[200px]">
-            <code id="fengari-console"></code>
-            <div class="fengari-input-container self-end w-full">
-                <label id="fengari-prompt" for="fengari-input"> > </label>
-                <textarea class="w-full" id="fengari-input" rows="1" placeholder="try here, for quick tutorial: `x y ^ 5 % !` then ShiftEnter"></textarea>
+            <code id="flure-console"></code>
+            <div class="flure-input-container self-end w-full">
+                <label id="flure-prompt" for="flure-input">&gt;</label>
+                <textarea class="w-full" id="flure-input" rows="1" placeholder="try here, for quick tutorial: `x y ^ 5 % !` then ShiftEnter"></textarea>
             </div>
         </div>
-
-        <div class="w-1/2 mt-4">
-          <button id="save-btn" type="button" disabled class="py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200  focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">save image(.pbm)</button>
-        </div>
-
       </div>
 
       </div>

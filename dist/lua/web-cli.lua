@@ -33,6 +33,7 @@ _G.print = function(...)
     local toprint = pack(...)
 
     local line = document:createElement("pre")
+    line.className = "history-line"
     line.style["white-space"] = "pre-wrap"
     output:appendChild(line)
 
@@ -78,13 +79,14 @@ local function render_chunks(code, iter)
     end, 0);
   else
     window.flure_value = file
+    print("《PROCESS_END》: done (click icon to save .pbm file).")
     triggerEvent(output, "flure_image_result_end")
   end
 end
 
 local function doComputeImage()
   file = ""
-  print("computing a (1-bit) binary graphic image...")
+  print("《PROCESS_START》: computing a (1-bit) binary graphic image...")
   if input.value.length == 0 then
     print("empty input value")
     return
@@ -107,7 +109,8 @@ end
 local function doREPL()
     do
         local line = document:createElement("span")
-        line:appendChild(document:createTextNode(prompt.textContent))
+        line.className = "history-line"
+        line:appendChild(document:createTextNode(prompt.textContent .. " "))
         local item = document:createElement("pre")
         item.className = "lua"
         item.style.padding = "0"

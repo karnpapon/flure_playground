@@ -16,6 +16,25 @@ function draw(canvas, image, current_y) {
   }
 }
 
+function drawBinaryNumber(canvas, { height, width, data }, current_y) {
+  let offset = 45;
+  let ctx = canvas.getContext("2d");
+  let _width = 545 * 1.5;
+  let _height = 540 * 1.5;
+  canvas.height = _height;
+  canvas.width = _width;
+  ctx.font = "10px monospace";
+  if (current_y > offset) {
+    for (let y = offset + 1; y < current_y; y++) {
+      for (let x = 0; x < width; x++) {
+        if (y % 2 == 0 && x % 2 == 0) {
+          ctx.fillText(data[y][x], 0 + x * 3.2, 5 * (y - offset));
+        }
+      }
+    }
+  }
+}
+
 function drawPBM(ctx, { height, width, data }, current_y) {
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
@@ -97,7 +116,7 @@ function parseLine(line) {
   return line.replace(/\s+/g, "|").replace(/^\|/, "").split("|").map(Number);
 }
 
-function pbm2canvas(pbmString, canvas, current_y) {
+function pbm2canvas(pbmString, canvas, binary_canvas, current_y) {
   let parsed = parse(pbmString);
   if (!parsed.format) {
     throw new Error("Could not determine format");
@@ -106,5 +125,6 @@ function pbm2canvas(pbmString, canvas, current_y) {
     canvas = document.createElement("canvas");
   }
   draw(canvas, parsed, current_y);
+  drawBinaryNumber(binary_canvas, parsed, current_y);
   return canvas;
 }

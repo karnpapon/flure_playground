@@ -164,9 +164,6 @@ function input:onkeydown(e)
         return false
     elseif key == "Enter" and e.shiftKey then
         historyIndex = nil
-        -- local loading_elem = document:getElementById("canvas_loading")
-        -- loading_elem.style.display = "flex"
-        -- loading_elem.style.flexDirection = "column"
         doComputeImage()
         return false
     elseif key == "ArrowUp" or key == "Up" then

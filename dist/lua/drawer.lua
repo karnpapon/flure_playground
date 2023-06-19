@@ -3,7 +3,7 @@ local interpreter = require "lua.vm"
 local grid = require "lua.grid"
 
 local M = {}
-local sz = 128 * 2
+local sz = 128*2;
 
 local window = js.global
 local document = window.document

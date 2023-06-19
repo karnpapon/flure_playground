@@ -9,13 +9,14 @@
     <link rel="icon" type="image/png" href="public/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="pbm2canvas.js" type="text/javascript"></script>
+    <script src="bundle.js"></script>
   </head>
   <body>
 
     <script type="text/javascript">
       window.onload = function(){
 
-        emptyCanvasPlacehoder()
+        renderWelcomeCanvas()
 
         let output = document.getElementById("flure-console")
 
@@ -37,17 +38,15 @@
             loading_elem.style.display = "none"
             pbm2canvas(window.flure_value, canvas) 
             
-            // let computed_txts = window.flure_value
             let save_btn = document.getElementById("save-btn")
             save_btn.removeEventListener("click", save)
             save_btn.disabled = false
             save_btn.style.backgroundColor = "white"
-            // save_btn.style.color = "white"
             save_btn.addEventListener("click", () => save())
         })
       }
 
-      function emptyCanvasPlacehoder(){
+      function renderWelcomeCanvas(){
         let width = 800 
         let height = 800
         let canvas = document.getElementById("flure_canvas")
@@ -71,7 +70,6 @@
         <div class="relative flex justify-center items-center h-auto  rounded-xl overflow-hidden w-[70%]">
           <div class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden">
             <div id="canvas_loading" class="hidden w-full h-full justify-center items-center text-xl">
-              <!-- <p>loading...</p> -->
               <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_nOfF{animation:spinner_qtyZ 2s cubic-bezier(0.36,.6,.31,1) infinite}.spinner_fVhf{animation-delay:-.5s}.spinner_piVe{animation-delay:-1s}.spinner_MSNs{animation-delay:-1.5s}@keyframes spinner_qtyZ{0%{r:0}25%{r:3px;cx:4px}50%{r:3px;cx:12px}75%{r:3px;cx:20px}100%{r:0;cx:20px}}</style><circle class="spinner_nOfF" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3"/></svg>
             </div>
             <div class="absolute left-0 bottom-0 z-[99] mb-2 ml-2">
@@ -130,10 +128,6 @@
         <div class="pt-4 bottom-0 left-0 w-full dark:bg-gray-700 md:flex md:items-center md:justify-between">
           <div class="w-full flex mt-4 space-x-6 justify-end md:mt-0">
             <span class="text-xs  text-gray-500 dark:text-gray-300 sm:text-center">MIT License, 2023, Bangkok Thailand  <a target="_blank" class="underline" href="https://github.com/karnpapon/flure">https://github.com/karnpapon/flure</a></span>
-              <!-- <a target="_blank" href="https://github.com/karnpapon/flure" class="text-gray-400 hover:text-gray-900 dark:hover:text-white">
-                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
-                  <span class="sr-only">GitHub account</span>
-              </a> -->
           </div>
         </div>
       </div>
@@ -142,9 +136,7 @@
       
     </div>
 
-
     <script src="fengari-web.js" type="text/javascript"></script>
     <script src="lua/web-cli.lua" type="application/lua" async></script>
-    <script src="bundle.js"></script>
   </body>
 </html>

@@ -28,6 +28,7 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
     for (let y = offset + 1; y < current_y; y++) {
       for (let x = 0; x < width; x++) {
         if (y % 2 == 0 && x % 2 == 0) {
+          ctx.fillStyle = data[y][x] === 0 ? "black" : "grey"; 
           ctx.fillText(data[y][x], 0 + x * 3.2, 5 * (y - offset));
         }
       }
@@ -38,15 +39,17 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
 function drawPBM(ctx, { height, width, data }, current_y) {
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
-      if (data[y][x] === 1) {
+      // if (data[y][x] === 1) {
         // if (x % 2 || y % 2) {
         //   ctx.fillStyle = "red";
         //   ctx.fillRect(x + 1, y + 1, 1, 1);
         // }
 
-        ctx.fillStyle = "black";
+        ctx.fillStyle = data[y][x] === 1 ? "black" : "white";
         ctx.fillRect(x, y, 1, 1);
-      }
+        ctx.fillStyle = "black";
+        ctx.fillRect(x, y + 1, 1, 1);
+      // }
     }
   }
 

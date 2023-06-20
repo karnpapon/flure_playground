@@ -1,6 +1,6 @@
 local js = require "js"
 local vm = require "lua.vm"
-local drawer = require "lua.drawer"
+local grid = require "lua.grid"
 local interpreter = require "lua.vm"
 
 -- Save references to lua baselib functions used
@@ -18,6 +18,13 @@ local output = document:getElementById("flure-console")
 local prompt = document:getElementById("flure-prompt")
 local input = document:getElementById("flure-input")
 assert(output and prompt and input)
+
+local sz = 128*2;
+local file = ""
+local coord = {}
+local is_image_completed = true
+
+grid.init_grid(sz)
 
 local function triggerEvent(el, type)
     local e = document:createEvent("HTMLEvents")
@@ -66,18 +73,14 @@ local function run_flure_repl(line)
   end
 end
 
-local sz = 128*2;
-local file = ""
-
 -- wrapped in setTimeout to prevent blocking UI thread issue.
 local function render_chunks(code, iter)
   if iter ~= sz then
     window:setTimeout(function()
       for x = 1, sz, 1 do
-        local opt = {}
-        opt["x"] = x
-        opt["y"] = iter
-        local val = interpreter.EXEC(code, opt)
+        coord["x"] = x
+        coord["y"] = iter
+        local val = interpreter.EXEC(code, coord)
         file = file .. val .. " "
         file = file .. (x == sz and "\n" or "")
       end
@@ -89,10 +92,13 @@ local function render_chunks(code, iter)
   else
     print("《PROCESS_END》: done (click icon to save .pbm file).")
     triggerEvent(output, "flure_image_result_end")
+    is_image_completed = true
   end
 end
 
 local function doComputeImage()
+  if not is_image_completed then return end
+  is_image_completed = false
   file = ""
   print("《PROCESS_START》: computing a (1-bit) binary graphic image...")
   if input.value.length == 0 then
@@ -108,7 +114,7 @@ local function doComputeImage()
       end
   end
   vm.build_mode = true
-  drawer.init()
+  -- drawer.init()
   triggerEvent(output, "flure_image_result_starting")
   file = file .. ("P1\n# " .. "output_img" .. "\n" .. sz .. " " .. sz .. "\n")
   render_chunks(line, 1)

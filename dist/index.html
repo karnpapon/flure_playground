@@ -61,20 +61,21 @@
         let height = 800;
         let canvas = document.getElementById("flure_canvas");
         let ctx = canvas.getContext("2d");
+        let x_pos = 0
 
         canvas.height = height;
-        canvas.width = width * 2;
+        canvas.width = width;
         ctx.font = "20px monospace";
-        ctx.fillText("flure playground", 40, 50);
+        ctx.fillText("flure playground", x_pos, 50);
 
         ctx.font = "14px monospace";
         ctx.fillText(
           'a playground for "flure", a stack-based programming language',
-          40,
+          x_pos,
           30 * 3
         );
-        ctx.fillText("to create binary graphic (1-bit).", 40, 30 * 4);
-        ctx.fillText("inspired by FORTH language.", 40, 30 * 5);
+        ctx.fillText("to create binary graphic (1-bit).", x_pos, 30 * 4);
+        ctx.fillText("inspired by FORTH language.", x_pos, 30 * 5);
       }
 
       function renderBinaryCanvas() {
@@ -88,15 +89,15 @@
         ctx.fillStyle = "rgb(100,100,100)";
         ctx.font = "10px monospace";
         for (i = 0; i < 256; i++) {
-          ctx.fillText("0".repeat(135), 0, 10 * i);
+          ctx.fillText("0".repeat(136), 0, 10 * i);
         }
       }
     </script>
 
     <div class="h-screen p-10 bg-white dark:bg-gray-900 antialiased flex-col">
-      <div class="flex h-full">
+      <div class="flex h-full justify-center">
         <div
-          class="relative flex justify-center items-center h-auto rounded-xl overflow-hidden w-[70%]"
+          class="relative flex justify-center items-center h-auto rounded-xl overflow-hidden w-[56%]"
         >
           <div
             class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden"
@@ -115,7 +116,7 @@
                 />
               </button>
             </div>
-            <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full" />
+            <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" />
           </div>
         </div>
         <div class="flex flex-col pl-6">

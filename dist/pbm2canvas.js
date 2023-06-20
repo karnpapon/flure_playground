@@ -49,6 +49,26 @@ function drawPBM(ctx, { height, width, data }, current_y) {
       }
     }
   }
+
+  // const nx = width / 2;
+  // const ny = nx;
+
+  // ctx.fillRect(0, 0, width, height);
+  // const imData = ctx.getImageData(0, 0, nx, ny);
+  // const { data } = imData;
+  // // console.log("data-----", data);
+  // for (let x = 0; x < nx; x++) {
+  //   for (let y = 0; y < ny; y++) {
+  //     // if ((x ^ y) % 61 === 1) {
+  //     if (_data[y][x] === 1) {
+  //       let a = 4 * (x + y * nx);
+  //       data[a++] = data[a++] = data[a++] = 255;
+  //     }
+  //   }
+  // }
+  // ctx.putImageData(imData, 0, 0);
+  // ctx.imageSmoothingEnabled = false;
+  // ctx.drawImage(ctx.canvas, 0, 0, nx, ny, 0, 0, width, height);
 }
 
 function drawPGM(ctx, { height, width, data, maxValue }) {

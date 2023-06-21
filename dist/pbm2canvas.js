@@ -61,10 +61,10 @@ function drawPBM(ctx, { height, width, data }, current_y) {
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
       if (data[y][x] === 1) {
-        if (x % 2 || y % 2) {
-          ctx.fillStyle = "red";
-          ctx.fillRect(x + 1, y + 1, 1, 1);
-        }
+        // if (x % 2 || y % 2) {
+        //   ctx.fillStyle = "red";
+        //   ctx.fillRect(x + 1, y + 1, 1, 1);
+        // }
         ctx.fillStyle = data[y][x] === 1 ? "black" : "";
         ctx.fillRect(x, y, 1, 1);
       }

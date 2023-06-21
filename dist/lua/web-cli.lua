@@ -5,7 +5,6 @@ local interpreter = require "lua.vm"
 
 -- Save references to lua baselib functions used
 local _G = _G
--- local load = load
 local pack, unpack, tinsert, tremove = table.pack, table.unpack, table.insert, table.remove
 local tostring = tostring
 -- local traceback = debug.traceback

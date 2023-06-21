@@ -19,7 +19,7 @@ local prompt = document:getElementById("flure-prompt")
 local input = document:getElementById("flure-input")
 assert(output and prompt and input)
 
-local sz = 128*2;
+local sz = 128;
 local file = ""
 local coord = {}
 local is_image_completed = true

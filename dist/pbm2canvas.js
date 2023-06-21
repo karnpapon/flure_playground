@@ -3,9 +3,9 @@ const supportedFormats = ["P1", "P2"];
 function draw(canvas, image, current_y) {
   let { format, height, width } = image;
   let ctx = canvas.getContext("2d");
-  canvas.height = height * 3 - 20;
-  canvas.width = width * 3;
-  ctx.scale(3, 3);
+  canvas.height = height * 6 - 20;
+  canvas.width = width * 6;
+  ctx.scale(6, 6);
   switch (format) {
     case "P1":
       drawPBM(ctx, image, current_y);

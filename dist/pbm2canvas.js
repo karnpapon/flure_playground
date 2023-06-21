@@ -6,7 +6,6 @@ function draw(canvas, image, current_y) {
   canvas.height = height * 6 - 20;
   canvas.width = width * 6;
   ctx.scale(6, 6);
-  // ctx.scale( window.devicePixelRatio , window.devicePixelRatio );
   switch (format) {
     case "P1":
       drawPBM(ctx, image, current_y);
@@ -29,8 +28,11 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
   ctx.font = "10px monospace";
   if (current_y > offset_y) {
     for (let y = offset_y + 1; y < current_y; y++) {
+      // console.log("data bin", data, y, current_y)
       for (let x = 0; x < width; x++) {
           if (x > offset_x) {
+            // console.log("data bin", data[y], x)
+          if(!data[y]) return 
           ctx.fillStyle = data[y][x] === 0 ? "black" : "grey"; 
           ctx.fillText(data[y][x], 0 + (x - offset_x) * 8, 10 * (y - offset_y));
         }
@@ -43,15 +45,16 @@ function drawNav(canvas, { height, width, data }, current_y) {
   if(!data) return
   let ctx = canvas.getContext("2d");
   let _width = 60;
-  let _height = 1270;
+  let _height = 1280;
   canvas.height = _height;
   canvas.width = _width;
   ctx.fillStyle = "rgb(100,100,100)";
   ctx.font = "16px monospace";
-  for (let y = 0; y <= current_y; y++) {
+  for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
       ctx.clearRect(0,0,_width,_height)
-      ctx.fillText(` y:${y}`, 0, y*10);
+      ctx.fillText(height == ( y + 1 ) ? "END" : "START", 0, y*(10) - 20 );
+      ctx.fillText(`y:${y}`, 0, y*10);
     }
   }
 }
@@ -60,12 +63,12 @@ function drawPBM(ctx, { height, width, data }, current_y) {
   if(!data) return
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
-      if (data[y][x] === 1) {
+      if (data[y] && data[y][x] === 1) {
         // if (x % 2 || y % 2) {
         //   ctx.fillStyle = "red";
         //   ctx.fillRect(x + 1, y + 1, 1, 1);
         // }
-        ctx.fillStyle = data[y][x] === 1 ? "black" : "";
+        // ctx.fillStyle = data[y][x] === 1 ? "black" : "";
         ctx.fillRect(x, y, 1, 1);
       }
       // ctx.fillStyle = "black";
@@ -128,7 +131,7 @@ function drawPGM(ctx, { height, width, data, maxValue }) {
 // }
 //
 function parse(string) {
-  let lines = string.split("\n");
+  let lines = string.trimEnd().split("\n");
   let format = lines.shift().match(/^(P\d)$/)[0];
   if (!format || supportedFormats.indexOf(format) === -1) {
     throw new Error("Could not determine image format");

@@ -74,7 +74,7 @@ end
 
 -- wrapped in setTimeout to prevent blocking UI thread issue.
 local function render_chunks(code, iter)
-  if iter ~= sz then
+  if iter <= sz then
     window:setTimeout(function()
       for x = 1, sz, 1 do
         coord["x"] = x
@@ -83,7 +83,6 @@ local function render_chunks(code, iter)
         file = file .. val .. (x == sz and "" or " ")
         file = file .. (x == sz and "\n" or "")
       end
-
       render_chunks(code, iter + 1);
     end, 0);
     window.flure_value = file
@@ -170,6 +169,7 @@ function input:onkeydown(e)
         return false
     elseif key == "Enter" and e.shiftKey then
         historyIndex = nil
+        if input.value == "" then return end
         doComputeImage()
         return false
     elseif key == "ArrowUp" or key == "Up" then

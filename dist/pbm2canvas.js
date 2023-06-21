@@ -3,9 +3,10 @@ const supportedFormats = ["P1", "P2"];
 function draw(canvas, image, current_y) {
   let { format, height, width } = image;
   let ctx = canvas.getContext("2d");
-  canvas.height = height * 3 - 20;
-  canvas.width = width * 3;
-  ctx.scale(3, 3);
+  canvas.height = height * 6 - 20;
+  canvas.width = width * 6;
+  ctx.scale(6, 6);
+  // ctx.scale( window.devicePixelRatio , window.devicePixelRatio );
   switch (format) {
     case "P1":
       drawPBM(ctx, image, current_y);
@@ -18,19 +19,20 @@ function draw(canvas, image, current_y) {
 
 function drawBinaryNumber(canvas, { height, width, data }, current_y) {
   if(!data) return
-  let offset = 45;
+  let offset_y = 22;
+  let offset_x = 14;
   let ctx = canvas.getContext("2d");
   let _width = 545 * 1.5;
   let _height = 540 * 1.5;
   canvas.height = _height;
   canvas.width = _width;
   ctx.font = "10px monospace";
-  if (current_y > offset) {
-    for (let y = offset + 1; y < current_y; y++) {
+  if (current_y > offset_y) {
+    for (let y = offset_y + 1; y < current_y; y++) {
       for (let x = 0; x < width; x++) {
-        if (y % 2 == 0 && x % 2 == 0) {
+          if (x > offset_x) {
           ctx.fillStyle = data[y][x] === 0 ? "black" : "grey"; 
-          ctx.fillText(data[y][x], 0 + x * 3.2, 5 * (y - offset));
+          ctx.fillText(data[y][x], 0 + (x - offset_x) * 8, 10 * (y - offset_y));
         }
       }
     }

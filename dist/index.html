@@ -20,7 +20,8 @@
     <script type="text/javascript">
       window.onload = function () {
         renderWelcomeCanvas();
-        renderBinaryCanvas();
+        initBinaryCanvas();
+        initNavCanvas();
 
         let output = document.getElementById("flure-console");
 
@@ -41,8 +42,9 @@
         output.addEventListener("flure_image_result_processing", function (e) {
           let canvas = document.getElementById("flure_canvas");
           let binary_canvas = document.getElementById("flure_binary_display");
+          let flure_canvas_nav = document.getElementById("flure_canvas_nav");
           if (!window.flure_value) return false;
-          pbm2canvas(window.flure_value, canvas, binary_canvas, e.detail);
+          pbm2canvas(window.flure_value, canvas, binary_canvas, flure_canvas_nav, e.detail);
         });
 
         output.addEventListener("flure_image_result_end", function () {
@@ -78,7 +80,21 @@
         ctx.fillText("inspired by FORTH language.", x_pos, 30 * 5);
       }
 
-      function renderBinaryCanvas() {
+      function initNavCanvas() {
+        let width = 40;
+        let height = 800;
+        let canvas = document.getElementById("flure_canvas_nav");
+        let ctx = canvas.getContext("2d");
+
+        canvas.height = height;
+        canvas.width = width;
+        ctx.fillStyle = "rgb(100,100,100)";
+        ctx.font = "10px monospace";
+        ctx.fillText("y:0", 0, 10);
+       
+      }
+
+      function initBinaryCanvas() {
         let width = 545 * 1.5;
         let height = 540 * 1.5;
         let canvas = document.getElementById("flure_binary_display");
@@ -119,7 +135,8 @@
             <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" />
           </div>
         </div>
-        <div class="flex flex-col pl-6">
+        <canvas id="flure_canvas_nav" class="w-[40px]  mx-4"></canvas>
+        <div class="flex flex-col ">
           <div class="flex flex-1">
             <div
               class="flex w-[545px] h-[540px] overflow-hidden rounded-lg mb-4 p-2 bg-gray-100"

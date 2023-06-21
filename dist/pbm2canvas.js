@@ -39,20 +39,37 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
   }
 }
 
+function drawNav(canvas, { height, width, data }, current_y) {
+  if(!data) return
+  let ctx = canvas.getContext("2d");
+  let _width = 60;
+  let _height = 1270;
+  canvas.height = _height;
+  canvas.width = _width;
+  ctx.fillStyle = "rgb(100,100,100)";
+  ctx.font = "16px monospace";
+  for (let y = 0; y <= current_y; y++) {
+    for (let x = 0; x < width; x++) {
+      ctx.clearRect(0,0,_width,_height)
+      ctx.fillText(` y:${y}`, 0, y*10);
+    }
+  }
+}
+
 function drawPBM(ctx, { height, width, data }, current_y) {
   if(!data) return
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
-      // if (data[y][x] === 1) {
-        // if (x % 2 || y % 2) {
-        //   ctx.fillStyle = "red";
-        //   ctx.fillRect(x + 1, y + 1, 1, 1);
-        // }
-        ctx.fillStyle = data[y][x] === 1 ? "black" : "white";
+      if (data[y][x] === 1) {
+        if (x % 2 || y % 2) {
+          ctx.fillStyle = "red";
+          ctx.fillRect(x + 1, y + 1, 1, 1);
+        }
+        ctx.fillStyle = data[y][x] === 1 ? "black" : "";
         ctx.fillRect(x, y, 1, 1);
-        ctx.fillStyle = "black";
-        ctx.fillRect(x, y + 1, 1, 1);
-      // }
+      }
+      // ctx.fillStyle = "black";
+      // ctx.fillRect(x, y + 1, 1, 1);
     }
   }
 
@@ -142,7 +159,7 @@ function parseLine(line) {
   return line.replace(/\s+/g, "|").replace(/^\|/, "").split("|").map(Number);
 }
 
-function pbm2canvas(pbmString, canvas, binary_canvas, current_y) {
+function pbm2canvas(pbmString, canvas, binary_canvas, flure_canvas_nav, current_y) {
   let parsed = parse(pbmString);
   if (!parsed.format) {
     throw new Error("Could not determine format");
@@ -152,6 +169,7 @@ function pbm2canvas(pbmString, canvas, binary_canvas, current_y) {
   }
   draw(canvas, parsed, current_y);
   drawBinaryNumber(binary_canvas, parsed, current_y);
+  drawNav(flure_canvas_nav, parsed, current_y);
   // draw(canvas, parsed);
   return canvas;
 }

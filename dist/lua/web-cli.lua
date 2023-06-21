@@ -81,7 +81,7 @@ local function render_chunks(code, iter)
         coord["x"] = x
         coord["y"] = iter
         local val = interpreter.EXEC(code, coord)
-        file = file .. val .. " "
+        file = file .. val .. (x == sz and "" or " ")
         file = file .. (x == sz and "\n" or "")
       end
 
@@ -101,6 +101,8 @@ local function doComputeImage()
   if not is_image_completed then return end
   is_image_completed = false
   file = ""
+  coord = {}
+  window.flure_value = ""
   print("《PROCESS_START》: computing a (1-bit) binary graphic image...")
   if input.value.length == 0 then
     print("empty input value")
@@ -116,7 +118,7 @@ local function doComputeImage()
   end
   vm.build_mode = true
   triggerEvent(output, "flure_image_result_starting")
-  file = file .. ("P1\n# " .. "output_img" .. "\n" .. sz .. " " .. sz .. "\n")
+  file = file .. ("P1\n# " .. "output_img" .. "\n" .. math.floor(sz) .. " " .. math.floor(sz) .. "\n")
   render_chunks(line, 1)
 end
 

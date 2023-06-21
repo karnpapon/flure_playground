@@ -17,6 +17,7 @@ function draw(canvas, image, current_y) {
 }
 
 function drawPBM(ctx, { height, width, data }, current_y) {
+  if (!data) return;
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
       ctx.fillStyle = data[y][x] === 1 ? "black" : "white";

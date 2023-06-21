@@ -17,6 +17,7 @@ function draw(canvas, image, current_y) {
 }
 
 function drawBinaryNumber(canvas, { height, width, data }, current_y) {
+  if(!data) return
   let offset = 45;
   let ctx = canvas.getContext("2d");
   let _width = 545 * 1.5;
@@ -37,6 +38,7 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
 }
 
 function drawPBM(ctx, { height, width, data }, current_y) {
+  if(!data) return
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
       // if (data[y][x] === 1) {
@@ -44,7 +46,6 @@ function drawPBM(ctx, { height, width, data }, current_y) {
         //   ctx.fillStyle = "red";
         //   ctx.fillRect(x + 1, y + 1, 1, 1);
         // }
-
         ctx.fillStyle = data[y][x] === 1 ? "black" : "white";
         ctx.fillRect(x, y, 1, 1);
         ctx.fillStyle = "black";
@@ -149,5 +150,6 @@ function pbm2canvas(pbmString, canvas, binary_canvas, current_y) {
   }
   draw(canvas, parsed, current_y);
   drawBinaryNumber(binary_canvas, parsed, current_y);
+  // draw(canvas, parsed);
   return canvas;
 }

@@ -91,34 +91,35 @@
               <li><code>x</code> and <code>y</code> correspond to x,y coordinates</li>
               <li>arithmatics = <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
               <li>bitwise = <code>&</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></li>
-              <li>stack = <code>pop</code>, <code>push</code></li>
-              <li>show stack = <code>show</code></li>
-              <li>to exit = <code>bye</code></li>
+              <li>stack = <code>pop</code>, <code>push</code>, <code>show</code></li>
               <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term) = <code> : <function_name> &lt;...args&gt; ; </code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
-              <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
-              <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
-              <li>comments = <code>( &lt;...comments&gt; )</code></li>
-              <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code> function.</li>
-              <li>core = (<code>-1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
-              <div class="ml-4">
-                <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
-                <li><code>and</code> , <code>or</code> , <code>&gt;</code>(greater_than), <code>&lt;</code>(less_than)</li>
-                <li><code>dup</code>(duplicate) , <code>2dup</code>(double duplicate) , <code>swap</code> , <code>rot</code>(rotate)</li>
-                <li><code>abs</code>(absolute number)</li>
-                <li><code>%</code>(modulo), <code>!</code>(cast to 0 or 1)</li>
-              </div>
+                <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
+                <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
+                <li>comments = <code>( &lt;...comments&gt; )</code></li>
+                <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code> function.</li>
+                <li>core = (<code>-1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
+                <div class="ml-4">
+                  <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
+                  <li><code>and</code> , <code>or</code> , <code>&gt;</code>(greater_than), <code>&lt;</code>(less_than)</li>
+                  <li><code>dup</code>(duplicate) , <code>2dup</code>(double duplicate) , <code>swap</code> , <code>rot</code>(rotate)</li>
+                  <li><code>abs</code>(absolute number)</li>
+                  <li><code>%</code>(modulo), <code>!</code>(cast to 0 or 1)</li>
+                </div>
+                <li>to exit = <code>bye</code></li>
   
               <br/>
               <h1 class="text-xl font-bold">Examples</h1>
               <p>each line below will computes a different results</p>
-              <b>** [note] current computed image size = <code>128px * 128px</code> **</b>
-              <p class="pb-1">(these number (<code>128px</code> and <code>128px</code>) will be substituted by <code>w</code> and <code>h</code> in the future.)</p>
+              <p>
+                <b>[note] current computed image size = <code>128px * 128px</code></b>
+                (these number (<code>128</code> and <code>128</code>) can be substituted by <code>w</code> and <code>h</code>).
+              </p>
+              <br/>
               <li><code>x y ^ 5 % !</code></li>
               <li><code>x y + abs x y - abs 1 + ^ 2 &lt;&lt; 5 % !</code></li>
               <li><code>x 2 * y % !</code></li>
-              <li><code>x 128 2 / - 64 2 / * y 128 2 / - % !</code></li>
+              <li><code>x w 2 / - w 4 / * y w 2 / - % !</code></li>
             </div>
-  
           </div>
   
           <div class="repl bg-gray-100 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-[200px]">

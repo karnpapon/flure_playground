@@ -6,6 +6,7 @@ function draw(canvas, image, current_y) {
   canvas.height = height * 6 - 20;
   canvas.width = width * 6;
   ctx.scale(6, 6);
+
   switch (format) {
     case "P1":
       drawPBM(ctx, image, current_y);
@@ -52,9 +53,11 @@ function drawNav(canvas, { height, width, data }, current_y) {
   ctx.font = "16px monospace";
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
-      ctx.clearRect(0,0,_width,_height)
-      ctx.fillText(height == ( y + 1 ) ? "END" : "START", 0, y*(10) - 20 );
-      ctx.fillText(`y:${y}`, 0, y*10);
+      if ( y > 5 ) {
+        ctx.clearRect(0,0,_width,_height)
+        ctx.fillText(height == ( y + 1 ) ? "END" : "START", 0, y*(10) - 20 );
+        ctx.fillText(`y:${y}`, 0, y*10);
+      }
     }
   }
 }
@@ -68,7 +71,7 @@ function drawPBM(ctx, { height, width, data }, current_y) {
         //   ctx.fillStyle = "red";
         //   ctx.fillRect(x + 1, y + 1, 1, 1);
         // }
-        // ctx.fillStyle = data[y][x] === 1 ? "black" : "";
+        ctx.fillStyle = data[y][x] === 1 ? "black" : "";
         ctx.fillRect(x, y, 1, 1);
       }
       // ctx.fillStyle = "black";

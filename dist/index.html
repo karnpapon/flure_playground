@@ -202,9 +202,13 @@
       <canvas id="flure_canvas_scaler" class="w-[30px] h-[755px] mt-auto"></canvas>
       <canvas id="flure_canvas_nav" class="w-[40px] mr-2 ml-2"></canvas>
       <div class="flex flex-col ">
-        <div class="flex flex-1">
-          <div class="flex w-[545px] h-[540px] overflow-hidden rounded-lg mb-4 p-2 bg-gray-100">
+        <div class="flex flex-1 flex-col">
+          <div class="flex w-[545px] h-[540px] overflow-hidden rounded-lg p-2 bg-gray-100">
             <canvas id="flure_binary_display" />
+          </div>
+          <div class="bg-gray-100 w-full mb-2 rounded-lg -translate-y-2 rounded-t-none z-0">
+           <p class="text-xs p-2 text-gray-400">.pbm (portable bitmap file format): 128px * 128px</p>
+           <!-- <p class="text-xs p-2 text-gray-400">x y | y x * x & %</p> -->
           </div>
         </div>
 

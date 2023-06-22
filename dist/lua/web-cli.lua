@@ -81,7 +81,7 @@ local function render_chunks(code, iter)
         coord["x"] = x
         coord["y"] = iter
         local val = interpreter.EXEC(code, coord)
-        file = file .. val .. (x == sz and "" or " ")
+        file = file .. (val ~= nil and val or "0") .. (x == sz and "" or " ")
         file = file .. (x == sz and "\n" or "")
       end
 
@@ -102,6 +102,7 @@ local function doComputeImage()
   is_image_completed = false
   file = ""
   coord = {}
+  vm.clear()
   window.flure_value = ""
   print("《PROCESS_START》: computing a (1-bit) binary graphic image...")
   if input.value.length == 0 then

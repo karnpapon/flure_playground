@@ -18,6 +18,12 @@ local READ
 local EVAL
 -- local EXEC
 
+function M.clear()
+  interpreter_stack = {}
+  control_flow_stack = {}
+  compile_words = ""
+end
+
 -- ------------------------------------------------------------------------------------
 -- EXTENDS STANDARD LIBRARY
 -- ------------------------------------------------------------------------------------

@@ -16,16 +16,35 @@ function draw(canvas, image, current_y) {
   }
 }
 
-function drawPBM(ctx, { height, width, data }, current_y) {
-  if (!data) return;
-  for (let y = 0; y < current_y; y++) {
-    for (let x = 0; x < width; x++) {
-      ctx.fillStyle = data[y][x] === 1 ? "black" : "white";
-      ctx.fillRect(x, y, 1, 1);
-      ctx.fillStyle = "black";
-      ctx.fillRect(x, y + 1, 1, 1);
+function drawPBM(ctx, { height, width, data: _data }, current_y) {
+  if (!_data) return;
+  // for (let y = 0; y < current_y; y++) {
+  //   for (let x = 0; x < width; x++) {
+  //     ctx.fillStyle = data[y][x] === 1 ? "black" : "white";
+  //     ctx.fillRect(x, y, 1, 1);
+  //     ctx.fillStyle = "black";
+  //     ctx.fillRect(x, y + 1, 1, 1);
+  //   }
+  // }
+
+  const nx = width;
+  const ny = nx;
+
+  // https://observablehq.com/@stringertheory/bit-field-patterns
+  ctx.fillRect(0, 0, width, height);
+  const imData = ctx.getImageData(0, 0, nx, ny);
+  const { data } = imData;
+  for (let x = 0; x < nx; x++) {
+    for (let y = 0; y < ny; y++) {
+      if (_data[y] && _data[y][x] === 0) {
+        let a = 4 * (x + y * nx);
+        data[a++] = data[a++] = data[a++] = 255;
+      }
     }
   }
+  ctx.putImageData(imData, 0, 0);
+  ctx.imageSmoothingEnabled = false;
+  ctx.drawImage(ctx.canvas, 0, 0, nx, ny, 0, 0, width, height);
 }
 
 function drawPGM(ctx, { height, width, data, maxValue }) {

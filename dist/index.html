@@ -58,8 +58,6 @@
       });
 
       output.addEventListener("flure_image_result_end", function () {
-        // let loading_elem = document.getElementById("canvas_loading");
-        // loading_elem.style.display = "none";
         let save_btn = document.getElementById("save-btn");
         save_btn.removeEventListener("click", save);
         save_btn.disabled = false;
@@ -91,7 +89,8 @@
       let flure_canvas = document.getElementById("flure_canvas");
       flure_canvas.style.display = "none";
       flure_welcome_msg.style.display = "flex";
-      initBinaryCanvas()
+      window.flure_value = ""
+      clearBinaryCanvas()
     }
 
     function initScalerY(){
@@ -158,18 +157,33 @@
       ctx_scaler.fillText("(127,0)", (scale_nav_x_pixel_offset) + (width - 55), scale_nav_x_offset-off_x ); 
     }
 
-    function initBinaryCanvas() {
+    function clearBinaryCanvas() {
       let canvas = document.getElementById("flure_binary_display");
-      let width = 545 * 1.5;
-      let height = 540 * 1.5;
       let ctx = canvas.getContext("2d");
+      let width = canvas.clientWidth * 1.7 ;
+      let height = canvas.clientHeight * 1.7 ;
       canvas.height = height;
       canvas.width = width;
       ctx.scale(1.5,1.5)
       ctx.fillStyle = "rgb(100,100,100)";
       ctx.font = "10px monospace";
-      for (i = 0; i < 256; i++) {
-        ctx.fillText("0".repeat(136), 0, 10 * i);
+      for (i = 0; i < 128; i++) {
+        ctx.fillText("0".repeat(canvas.clientWidth / 2), 0, 10 * i);
+      }
+    }
+
+    function initBinaryCanvas() {
+      let canvas = document.getElementById("flure_binary_display");
+      let ctx = canvas.getContext("2d");
+      let width = canvas.clientWidth * 2 ;
+      let height = canvas.clientHeight * 4 ;
+      canvas.height = height-(canvas.clientHeight / 2);
+      canvas.width = width;
+      ctx.scale(1.25,1.25)
+      ctx.fillStyle = "rgb(100,100,100)";
+      ctx.font = "10px monospace";
+      for (i = 0; i < 128; i++) {
+        ctx.fillText("0".repeat(canvas.clientWidth / 2), 0, 10 * i);
       }
     }
   </script>
@@ -227,14 +241,7 @@
                 <span class="text-xs  text-gray-500 dark:text-gray-300 sm:text-center">MIT License, 2023, Bangkok Thailand  <a target="_blank" class="underline" href="https://github.com/karnpapon/flure">https://github.com/karnpapon/flure</a></span>
               </div>
             </div>
-            <!-- <div class="absolute left-0 bottom-0 z-[99] mb-3 ml-3">
-              <button id="save-btn" type="button" disabled
-                class="inset-0 py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200">
-                <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)" />
-              </button>
-            </div> -->
             <canvas id="flure_canvas" class="absolute z-10 rounded-lg h-full w-[calc(100%_-_10px)] object-cover  dark:bg-black" />
-            <!-- <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" /> -->
           </div>
         </div>
       </div>
@@ -245,17 +252,15 @@
         </div>
         <canvas id="flure_canvas_scaler" class="w-[30px] h-full mt-auto"></canvas>
       </div>
-      <!-- <canvas id="flure_canvas_nav" class="w-8 max-w-[40px] mr-2 ml-2"></canvas> -->
-      <div class="flex flex-col ">
+      <div class="flex flex-col">
         <div class="flex flex-1 flex-col ">
-          <div class="flex max-w-[545px] max-h-[540px] overflow-hidden rounded-lg p-2 bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600">
-            <canvas id="flure_binary_display"  class="w-[99%] h-full"/>
+          <div class="flex w-full max-w-[545px] max-h-[460px] overflow-hidden rounded-lg rounded-b-none p-2 pb-0 bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600">
+            <canvas id="flure_binary_display"  class="w-full h-full"/>
           </div>
-          <div class="flex justify-center items-center p-2 bg-gray-100 dark:bg-black w-full mb-2 rounded-lg -translate-y-2 rounded-t-none z-0 border border-t-white dark:border-t-black border-gray-100 dark:border-gray-600">
+          <div class="flex w-full justify-center items-center p-2 bg-gray-100 dark:bg-black  mb-2 rounded-lg  rounded-t-none z-0 border border-t-none border-gray-100 dark:border-gray-600">
             <div class="">
               <button id="save-btn" type="button" alt="save image (.pbm)" disabled
                 class="text-xs cursor-pointer font-medium mr-2 focus:outline-none text-gray-400 rounded-lg  focus:z-10 focus:ring-4 focus:ring-gray-200">
-                <!-- <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)" /> -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="save-btn" width="20" height="20" viewBox="0 0 20 20">
                   <path d="M17 12v5H3v-5H1v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5z"/>
                   <path d="M10 15l5-6h-4V1H9v8H5l5 6z"/>
@@ -274,7 +279,7 @@
           <div class="flure-input-container self-end w-full">
             <label class="dark:text-white" id="flure-prompt" for="flure-input">&gt;</label>
             <textarea class="w-full dark:text-white" id="flure-input" rows="1" autofocus
-              placeholder="try: `x y ^ 5 % !` then ShiftEnter, or hit `Esc` to clear a screen"></textarea>
+              placeholder="try: `x y ^ 5 % !` + ShiftEnter, clear a screen = `Esc`"></textarea>
           </div>
         </div>
       </div>

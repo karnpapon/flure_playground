@@ -18,29 +18,33 @@ function draw(canvas, image, current_y) {
 }
 
 function drawBinaryNumber(canvas, { height, width, data }, current_y) {
-  if(!data) return
+  if (!data) return;
   let offset_y = 32;
   let offset_x = 26;
   let ctx = canvas.getContext("2d");
-  let _width = canvas.clientWidth * 1.7 ;
-  let _height = canvas.clientHeight * 1.7 ;
+  let _width = canvas.clientWidth * 1.7;
+  let _height = canvas.clientHeight * 1.7;
   canvas.height = _height + 1.2;
   canvas.width = _width;
   ctx.font = "10px monospace";
-  ctx.scale(1.5,1.5)
+  ctx.scale(1.5, 1.5);
   if (current_y > offset_y) {
     for (let y = offset_y + 1; y < current_y; y++) {
       // console.log("data bin", data, y, current_y)
       for (let x = 0; x < width; x++) {
-          if (x > offset_x) {
-            // console.log("data bin", data[y], x)
-          if(!data[y]) return 
+        if (x > offset_x) {
+          // console.log("data bin", data[y], x)
+          if (!data[y]) return;
           if (window.theme === "dark") {
-            ctx.fillStyle = data[y][x] === 0 ? "white" : "#c9c9c9"; 
+            ctx.fillStyle = data[y][x] === 0 ? "white" : "#c9c9c9";
           } else {
-            ctx.fillStyle = data[y][x] === 0 ? "black" : "grey"; 
+            ctx.fillStyle = data[y][x] === 0 ? "black" : "grey";
           }
-          ctx.fillText(data[y][x], 0 + (x - offset_x) * 8, 10 * (y - offset_y));
+          ctx.fillText(
+            data[y][x],
+            -4.5 + (x - offset_x) * 8,
+            10 * (y - offset_y)
+          );
         }
       }
     }
@@ -48,7 +52,7 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
 }
 
 function drawNav(canvas, { height, width, data }, current_y) {
-  if(!data) return
+  if (!data) return;
   let ctx = canvas.getContext("2d");
   let _width = 60;
   let _height = 1280;
@@ -58,10 +62,10 @@ function drawNav(canvas, { height, width, data }, current_y) {
   ctx.font = "16px monospace";
   for (let y = 0; y < current_y; y++) {
     for (let x = 0; x < width; x++) {
-      if ( y > 5 ) {
-        ctx.clearRect(0,0,_width,_height)
-        ctx.fillText(height == ( y + 1 ) ? "END" : "START", 0, y*(10) - 20 );
-        ctx.fillText(`y:${y}`, 0, y*10);
+      if (y > 5) {
+        ctx.clearRect(0, 0, _width, _height);
+        ctx.fillText(height == y + 1 ? "END" : "START", 0, y * 10 - 20);
+        ctx.fillText(`y:${y}`, 0, y * 10);
       }
     }
   }
@@ -90,7 +94,7 @@ function drawNav(canvas, { height, width, data }, current_y) {
 // }
 
 function drawPBM(ctx, { height, width, data: _data }, current_y) {
-  if(!_data) return
+  if (!_data) return;
   // for (let y = 0; y < current_y; y++) {
   //   for (let x = 0; x < width; x++) {
   //     if (data[y] && data[y][x] === 1) {
@@ -107,15 +111,13 @@ function drawPBM(ctx, { height, width, data: _data }, current_y) {
   const nx = width;
   const ny = nx;
 
-
-
   // https://observablehq.com/@stringertheory/bit-field-patterns
   ctx.fillRect(0, 0, width, height);
   const imData = ctx.getImageData(0, 0, nx, ny);
   const { data } = imData;
   for (let x = 0; x < nx; x++) {
     for (let y = 0; y < ny; y++) {
-        if (_data[y] && _data[y][x] === 0) {
+      if (_data[y] && _data[y][x] === 0) {
         // if (eval(cond)) {
         //   if (x % 2 || y % 2) {
         //   //   ctx.fillRect(x + 1, y + 1, 1, 1);

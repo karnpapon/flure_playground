@@ -194,25 +194,29 @@
         <canvas id="flure_canvas_scaler_x" class=" w-[calc(100%_-_10px)] h-[30px]"></canvas>
         <div class="relative flex justify-center items-center h-full rounded-xl overflow-hidden">
           <div class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden">
-            <div id="flure_welcome_msg" class="flex flex-col pl-2 pt-2 h-full justify-between text-sm dark:text-white">
+            <div id="flure_welcome_msg" class="flex flex-col pl-2 pt-2 h-full justify-between text-sm text-gray-600 dark:text-white font-mono">
               <div class="">
-                <p class="text-2xl mb-5">flure playground</p>
+                <!-- <p class="text-2xl mb-5 font-bold">flure playground</p> -->
                 <p>a playground for "flure", a stack-based programming language</p>
                 <p>to create binary graphic (1-bit), inspired by FORTH language.</p>
               </div>
 
               <div class="flex flex-col text-xs pt-8">
+                <h1 class="font-bold">Quickstart</h1>
+                <li>copy, <code>x y ^ 5 % !</code>to the console (right handside) then Shift+Enter</li>
+                <li>to clear a screen just hit <code>Esc</code></li>
+                <br/>
                 <h1 class="font-bold">Guides</h1>
                 <p><code>flure</code> use reverse polish notation (RPN) eg <code>10 10 +</code> will return <code>20</code></p>
                 <li><code>x</code> and <code>y</code> correspond to x,y coordinates</li>
                 <li>arithmatics = <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
                 <li>bitwise = <code>&</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></li>
                 <li>stack = <code>pop</code>, <code>push</code>, <code>show</code></li>
-                <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term) = <code> : <function_name> &lt;...args&gt; ; </code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
+                <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term)<code>: <function_name> &lt;...args&gt;;</code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
                   <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
                   <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
                   <li>comments = <code>( &lt;...comments&gt; )</code></li>
-                  <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code> function.</li>
+                  <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code></li>
                   <li>core = (<code>-1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
                   <div class="ml-4">
                     <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
@@ -246,9 +250,9 @@
         </div>
       </div>
       <div class="mr-4"> 
-        <div class="-translate-y-1 flex text-xs flex-col justify-between text-gray-500 dark:text-white whitespace-nowrap">
-          <p>x axis</p>
-          <p>y axis</p>
+        <div class="-translate-y-1 flex text-xs flex-col justify-between text-gray-500 dark:text-white whitespace-nowrap font-mono font-bold">
+          <p>x </p>
+          <p>&nbsp; y </p>
         </div>
         <canvas id="flure_canvas_scaler" class="w-[30px] h-full mt-auto"></canvas>
       </div>
@@ -268,13 +272,13 @@
 
               </button>
             </div>
-            <p class="text-xs text-gray-400 dark:text-white">.pbm (portable bitmap file format): 128px * 128px</p>
+            <p class="text-xs text-gray-400 dark:text-white font-mono">.pbm (portable bitmap file format): 128px * 128px</p>
             <!-- <p class="text-xs p-2 text-gray-400">x y | y x * x & %</p> -->
            </div>
         </div>
 
         <div
-          class="repl bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-[200px] hover:border hover:border-gray-400">
+          class="repl bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-full max-h-[260px] hover:border hover:border-gray-400">
           <code id="flure-console"></code>
           <div class="flure-input-container self-end w-full">
             <label class="dark:text-white" id="flure-prompt" for="flure-input">&gt;</label>

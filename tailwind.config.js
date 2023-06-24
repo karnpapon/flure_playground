@@ -1,11 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ['class', '[data-mode="dark"]'],
+  darkMode: ["class", '[data-mode="dark"]'],
   content: ["./dist/*.html"],
   theme: {
     extend: {
       colors: {
-        "dark-gray": "#585858"
+        "dark-gray": "#585858",
+      },
+      fontSize: {
+        xxs: ["0.6rem", "20px"],
       },
     },
   },

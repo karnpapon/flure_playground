@@ -24,8 +24,6 @@
     window.onload = function () {
       let output = document.getElementById("flure-console");
 
-      initScalerX()
-      initScalerY()
       initBinaryCanvas();
       // initNavCanvas();
 
@@ -93,70 +91,6 @@
       clearBinaryCanvas()
     }
 
-    function initScalerY(){
-      let canvas_scaler = document.getElementById("flure_canvas_scaler");
-      let height = canvas_scaler.clientHeight;
-      let ctx_scaler = canvas_scaler.getContext("2d");
-      let scale_nav_x_offset = 15 
-      let flure_size = 128
-      let canvas_scaler_h = height - 10
-      let scale_nav_x_pixel_offset = (canvas_scaler_h - 20) / flure_size 
-      canvas_scaler.height = canvas_scaler_h + 30;
-      canvas_scaler.width = 32;
-      
-      ctx_scaler.strokeStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
-      ctx_scaler.lineWidth = window.theme === "dark" ? 0.25 : 0.25;
-      ctx_scaler.beginPath();
-      ctx_scaler.moveTo(scale_nav_x_offset, 5);
-      ctx_scaler.lineTo(scale_nav_x_offset + 10, 5);
-      ctx_scaler.moveTo(scale_nav_x_offset + 10, 5);
-      ctx_scaler.lineTo(scale_nav_x_offset + 10, canvas_scaler_h);
-
-      ctx_scaler.moveTo(scale_nav_x_offset + 10, canvas_scaler_h);
-      ctx_scaler.lineTo(scale_nav_x_offset, canvas_scaler_h);
-      ctx_scaler.stroke();
-
-      ctx_scaler.fillStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
-      ctx_scaler.save();
-      ctx_scaler.rotate(-Math.PI/2);
-      ctx_scaler.textAlign = "center";
-      ctx_scaler.font = "10px monospace";
-      ctx_scaler.fillText("(127,0)", -30, 20 ); 
-      ctx_scaler.fillText("(127,127)", -height + 42, 20 ); 
-      ctx_scaler.restore();
-    }
-
-    function initScalerX(){
-      let width = 800
-      let height = 30;
-      let canvas_scaler = document.getElementById("flure_canvas_scaler_x");
-      let ctx_scaler = canvas_scaler.getContext("2d");
-      let scale_nav_x_offset = 15 
-      let flure_size = 128
-      let canvas_scaler_h = height - 10
-      let scale_nav_x_pixel_offset = width / flure_size 
-      let off_x = 5
-      canvas_scaler.height = canvas_scaler_h + 10;
-      canvas_scaler.width = width;
-
-      ctx_scaler.strokeStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
-      ctx_scaler.lineWidth = window.theme === "dark" ? 0.25 : 0.25;
-      ctx_scaler.beginPath();
-      ctx_scaler.moveTo(off_x, 0 + 10);
-      ctx_scaler.lineTo(off_x, 0);
-      ctx_scaler.moveTo(off_x, 0);
-      ctx_scaler.lineTo(width, 0);
-
-      ctx_scaler.moveTo(width, 0);
-      ctx_scaler.lineTo(width, 0+10);
-      ctx_scaler.stroke();
-
-      ctx_scaler.fillStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
-      ctx_scaler.font = "10px monospace";
-      ctx_scaler.fillText("(0,0)", (scale_nav_x_pixel_offset), scale_nav_x_offset-off_x ); 
-      ctx_scaler.fillText("(127,0)", (scale_nav_x_pixel_offset) + (width - 55), scale_nav_x_offset-off_x ); 
-    }
-
     function clearBinaryCanvas() {
       let canvas = document.getElementById("flure_binary_display");
       let ctx = canvas.getContext("2d");
@@ -188,17 +122,22 @@
     }
   </script>
 
-  <div class="h-screen p-10 bg-white dark:bg-black  antialiased flex-col">
-    <div class="flex  h-full justify-center">
+  <div class="h-screen p-16 bg-white dark:bg-black  antialiased flex-col">
+    <div class="flex  h-full">
       <div class="relative flex flex-col h-full w-[56%]">
-        <canvas id="flure_canvas_scaler_x" class=" w-[calc(100%_-_10px)] h-[30px]"></canvas>
+        <div class="flex justify-between w-[98%] h-[10px] mt-auto border border-gray-400 border-b-0 border-dashed mb-4 text-xxs text-gray-600 dark:text-gray-400">
+          <p class="ml-1">(0,0)</p>
+          <p class="mr-1">(127,0)</p>
+        </div>
+        <!-- <canvas id="flure_canvas_scaler_x" class=" w-[calc(100%_-_10px)] h-[30px]"></canvas> -->
         <div class="relative flex justify-center items-center h-full rounded-xl overflow-hidden">
           <div class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden">
             <div id="flure_welcome_msg" class="flex flex-col pl-2 pt-2 h-full justify-between text-sm text-gray-600 dark:text-white font-mono">
               <div class="">
                 <!-- <p class="text-2xl mb-5 font-bold">flure playground</p> -->
-                <p>a playground for "flure", a stack-based programming language</p>
-                <p>to create binary graphic (1-bit), inspired by FORTH language.</p>
+                <p>a playground for <code>flure</code>, a stack-based programming language</p>
+                <p>to create binary graphic (1-bit), inspired by <code>FORTH</code> language</p>
+                <p>this playground consists of <code>REPL</code> mode (Enter) and <code>Build</code> mode</p> (Shift+Enter)
               </div>
 
               <div class="flex flex-col text-xs pt-8">
@@ -212,7 +151,7 @@
                 <li>arithmatics = <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
                 <li>bitwise = <code>&</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></li>
                 <li>stack = <code>pop</code>, <code>push</code>, <code>show</code></li>
-                <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term)<code>: <function_name> &lt;...args&gt;;</code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
+                <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term)<code>: <function_name> &lt;args&gt; ;</code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
                   <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
                   <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
                   <li>comments = <code>( &lt;...comments&gt; )</code></li>
@@ -249,14 +188,13 @@
           </div>
         </div>
       </div>
-      <div class="mr-4"> 
-        <div class="-translate-y-1 flex text-xs flex-col justify-between text-gray-500 dark:text-white whitespace-nowrap font-mono font-bold">
-          <p>x </p>
-          <p>&nbsp; y </p>
+      <div class="ml-4"> 
+        <div class="flex relative justify-between w-[10px] h-[95%] mt-8 border border-gray-400 border-l-0 border-dashed text-xxs text-gray-600 dark:text-gray-400">
+          <p class="absolute -left-6 top-3 ml-1 -rotate-90">(127,0)</p>
+          <p class="absolute -left-6 bottom-4 mr-1 -rotate-90">(127,127)</p>
         </div>
-        <canvas id="flure_canvas_scaler" class="w-[30px] h-full mt-auto"></canvas>
       </div>
-      <div class="flex flex-col">
+      <div id="right-col" class="flex flex-col w-[30rem] ml-auto">
         <div class="flex flex-1 flex-col ">
           <div class="flex w-full max-w-[545px] max-h-[460px] overflow-hidden rounded-lg rounded-b-none p-2 pb-0 bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600">
             <canvas id="flure_binary_display"  class="w-full h-full"/>

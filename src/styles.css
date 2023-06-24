@@ -2,7 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+html {
+  visibility: visible;
+  opacity: 1;
+}
+
 code { background-color: rgb(239, 239, 239); padding-left: 4px; padding-right: 4px; border-radius: 4px;}
+[data-mode="dark"] code { color: black;}
+[data-mode="dark"] .save-btn { fill: white;}
+.save-btn { fill: rgb(153, 153, 153);}
+.save-btn:hover { fill: rgb(84, 84, 84);}
 
 .repl {
 }
@@ -37,9 +48,3 @@ code { background-color: rgb(239, 239, 239); padding-left: 4px; padding-right: 4
 }
 
 .history-line { padding-top: 2.5px; padding-bottom: 2.5px;}
-
-
-html {
-  visibility: visible;
-  opacity: 1;
-}

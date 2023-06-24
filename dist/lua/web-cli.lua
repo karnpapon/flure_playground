@@ -5,7 +5,6 @@ local interpreter = require "lua.vm"
 
 -- Save references to lua baselib functions used
 local _G = _G
--- local load = load
 local pack, unpack, tinsert, tremove = table.pack, table.unpack, table.insert, table.remove
 local tostring = tostring
 -- local traceback = debug.traceback
@@ -46,7 +45,7 @@ _G.print = function(...)
     local toprint = pack(...)
 
     local line = document:createElement("pre")
-    line.className = "history-line"
+    line.className = "history-line dark:text-white"
     line.style["white-space"] = "pre-wrap"
     output:appendChild(line)
 
@@ -75,7 +74,7 @@ end
 
 -- wrapped in setTimeout to prevent blocking UI thread issue.
 local function render_chunks(code, iter)
-  if iter ~= sz then
+  if iter <= sz then
     window:setTimeout(function()
       for x = 1, sz, 1 do
         coord["x"] = x
@@ -84,20 +83,18 @@ local function render_chunks(code, iter)
         file = file .. (val ~= nil and val or "0") .. (x == sz and "" or " ")
         file = file .. (x == sz and "\n" or "")
       end
-
       render_chunks(code, iter + 1);
     end, 0);
     window.flure_value = file
     triggerCustomEvent(output, "flure_image_result_processing", iter)
   else
-    print("《PROCESS_END》: done (click icon to save .pbm file).")
+    print("《PROCESS_END》: done (to clear a screen hit `Esc`).")
     triggerEvent(output, "flure_image_result_end")
     is_image_completed = true
   end
 end
 
 local function doComputeImage()
-  -- FIXME: maybe it's better to handle re-eval by cancelling previous drawing.
   if not is_image_completed then return end
   is_image_completed = false
   file = ""
@@ -173,6 +170,7 @@ function input:onkeydown(e)
         return false
     elseif key == "Enter" and e.shiftKey then
         historyIndex = nil
+        if input.value == "" then return end
         doComputeImage()
         return false
     elseif key == "ArrowUp" or key == "Up" then

@@ -1,149 +1,287 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <style>html{visibility: hidden;opacity:0;}</style>
-    <meta charset="utf-8" />
-    <title>flure playground</title>
-    <meta name="description" content="flure" />
-    <meta name="author" content="karnpapon boonput" />
-    <link rel="icon" type="image/png" href="public/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="fengari-web.js" type="text/javascript"></script>
-    <script src="pbm2canvas.js" type="text/javascript"></script>
-    <script src="bundle.js"></script>
-  </head>
-  <body>
+<html data-mode="light" lang="en">
 
-    <script type="text/javascript">
-      window.onload = function(){
+<head>
+  <style>
+    html {
+      visibility: hidden;
+      opacity: 0;
+    }
+  </style>
+  <meta charset="utf-8" />
+  <title>flure playground</title>
+  <meta name="description" content="flure" />
+  <meta name="author" content="karnpapon boonput" />
+  <link rel="icon" type="image/png" href="public/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="fengari-web.js" type="text/javascript"></script>
+  <script src="bundle.js"></script>
+</head>
 
-        renderWelcomeCanvas()
+<body>
+  <script type="text/javascript">
+    window.theme = "light"
+    window.onload = function () {
+      let output = document.getElementById("flure-console");
 
-        let output = document.getElementById("flure-console")
+      initScalerX()
+      initScalerY()
+      initBinaryCanvas();
+      // initNavCanvas();
 
-        function save(){
-          if(!window.flure_value) return false
-          const bb = new Blob([window.flure_value ], { type: 'text/plain' });
-          const a = document.createElement('a');
-          a.download = 'flure_image.pbm';
-          a.href = window.URL.createObjectURL(bb);
-          a.click();
+      document.onkeydown = function(evt) {
+        evt = evt || window.event;
+        let isEscape = false;
+        if ("key" in evt) {
+          isEscape = (evt.key === "Escape" || evt.key === "Esc");
+        } else {
+          isEscape = (evt.keyCode === 27);
         }
+        if (isEscape) {
+          clearScreen()
+        }
+      };
 
-        output.addEventListener("flure_image_result_starting", function(){
-          // let loading_elem = document.getElementById("canvas_loading")
-          // loading_elem.style.display = "block"
-         })
+      output.addEventListener("flure_image_result_starting", function () {
+        let flure_welcome_msg = document.getElementById("flure_welcome_msg");
+        let flure_canvas = document.getElementById("flure_canvas"); 
+        flure_canvas.style.display = "block";
+        flure_welcome_msg.style.display = "none";
+      });
 
-        output.addEventListener("flure_image_result_processing", function(e){
-            let canvas = document.getElementById("flure_canvas")
-            if(!window.flure_value) return false
-            pbm2canvas(window.flure_value, canvas, e.detail) 
-        })
+      output.addEventListener("flure_image_result_processing", function (e) {
+        let canvas = document.getElementById("flure_canvas");
+        let binary_canvas = document.getElementById("flure_binary_display");
+        // let flure_canvas_nav = document.getElementById("flure_canvas_nav");
+        if (!window.flure_value) return false;
+        pbm2canvas(window.flure_value, canvas, binary_canvas, e.detail);
+      });
 
-        output.addEventListener("flure_image_result_end", function(){
-          // let loading_elem = document.getElementById("canvas_loading")
-          // loading_elem.style.display = "none"
-          let save_btn = document.getElementById("save-btn")
-          save_btn.removeEventListener("click", save)
-          save_btn.disabled = false
-          save_btn.style.backgroundColor = "white"
-          save_btn.addEventListener("click", () => save())
-        })
+      output.addEventListener("flure_image_result_end", function () {
+        // let loading_elem = document.getElementById("canvas_loading");
+        // loading_elem.style.display = "none";
+        let save_btn = document.getElementById("save-btn");
+        save_btn.removeEventListener("click", save);
+        save_btn.disabled = false;
+        save_btn.addEventListener("click", () => save());
+      }); 
+
+      const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+      });
+
+      if (params.theme) {
+        window.theme = params.theme
+        let html = document.querySelector('[data-mode]')
+        html.setAttribute("data-mode", params.theme)
       }
+    };
 
-      function renderWelcomeCanvas(){
-        let width = 800 
-        let height = 800
-        let canvas = document.getElementById("flure_canvas")
-        let ctx = canvas.getContext("2d");
+    function save() {
+      if (!window.flure_value) return false;
+      const bb = new Blob([window.flure_value], { type: "text/plain" });
+      const a = document.createElement("a");
+      a.download = "flure_image.pbm";
+      a.href = window.URL.createObjectURL(bb);
+      a.click();
+    }
 
-        canvas.height = height;
-        canvas.width = width*2;
-        ctx.font = "20px monospace";
-        ctx.fillText("flure playground", 40, 50);
+    function clearScreen(){
+      let flure_welcome_msg = document.getElementById("flure_welcome_msg");
+      let flure_canvas = document.getElementById("flure_canvas");
+      flure_canvas.style.display = "none";
+      flure_welcome_msg.style.display = "flex";
+      initBinaryCanvas()
+    }
 
-        ctx.font = "14px monospace";
-        ctx.fillText("a playground for \"flure\", a stack-based programming language", 40, 30*3);
-        ctx.fillText("to create binary graphic (1-bit).", 40, 30*4);
-        ctx.fillText("inspired by FORTH language.", 40, 30*5);
+    function initScalerY(){
+      let canvas_scaler = document.getElementById("flure_canvas_scaler");
+      let height = canvas_scaler.clientHeight;
+      let ctx_scaler = canvas_scaler.getContext("2d");
+      let scale_nav_x_offset = 15 
+      let flure_size = 128
+      let canvas_scaler_h = height - 10
+      let scale_nav_x_pixel_offset = (canvas_scaler_h - 20) / flure_size 
+      canvas_scaler.height = canvas_scaler_h + 30;
+      canvas_scaler.width = 32;
+      
+      ctx_scaler.strokeStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
+      ctx_scaler.lineWidth = window.theme === "dark" ? 0.25 : 0.25;
+      ctx_scaler.beginPath();
+      ctx_scaler.moveTo(scale_nav_x_offset, 5);
+      ctx_scaler.lineTo(scale_nav_x_offset + 10, 5);
+      ctx_scaler.moveTo(scale_nav_x_offset + 10, 5);
+      ctx_scaler.lineTo(scale_nav_x_offset + 10, canvas_scaler_h);
+
+      ctx_scaler.moveTo(scale_nav_x_offset + 10, canvas_scaler_h);
+      ctx_scaler.lineTo(scale_nav_x_offset, canvas_scaler_h);
+      ctx_scaler.stroke();
+
+      ctx_scaler.fillStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
+      ctx_scaler.save();
+      ctx_scaler.rotate(-Math.PI/2);
+      ctx_scaler.textAlign = "center";
+      ctx_scaler.font = "10px monospace";
+      ctx_scaler.fillText("(127,0)", -30, 20 ); 
+      ctx_scaler.fillText("(127,127)", -height + 42, 20 ); 
+      ctx_scaler.restore();
+    }
+
+    function initScalerX(){
+      let width = 800
+      let height = 30;
+      let canvas_scaler = document.getElementById("flure_canvas_scaler_x");
+      let ctx_scaler = canvas_scaler.getContext("2d");
+      let scale_nav_x_offset = 15 
+      let flure_size = 128
+      let canvas_scaler_h = height - 10
+      let scale_nav_x_pixel_offset = width / flure_size 
+      let off_x = 5
+      canvas_scaler.height = canvas_scaler_h + 10;
+      canvas_scaler.width = width;
+
+      ctx_scaler.strokeStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
+      ctx_scaler.lineWidth = window.theme === "dark" ? 0.25 : 0.25;
+      ctx_scaler.beginPath();
+      ctx_scaler.moveTo(off_x, 0 + 10);
+      ctx_scaler.lineTo(off_x, 0);
+      ctx_scaler.moveTo(off_x, 0);
+      ctx_scaler.lineTo(width, 0);
+
+      ctx_scaler.moveTo(width, 0);
+      ctx_scaler.lineTo(width, 0+10);
+      ctx_scaler.stroke();
+
+      ctx_scaler.fillStyle = window.theme === "dark" ? "white" : "rgb(100,100,100)";
+      ctx_scaler.font = "10px monospace";
+      ctx_scaler.fillText("(0,0)", (scale_nav_x_pixel_offset), scale_nav_x_offset-off_x ); 
+      ctx_scaler.fillText("(127,0)", (scale_nav_x_pixel_offset) + (width - 55), scale_nav_x_offset-off_x ); 
+    }
+
+    function initBinaryCanvas() {
+      let canvas = document.getElementById("flure_binary_display");
+      let width = 545 * 1.5;
+      let height = 540 * 1.5;
+      let ctx = canvas.getContext("2d");
+      canvas.height = height;
+      canvas.width = width;
+      ctx.scale(1.5,1.5)
+      ctx.fillStyle = "rgb(100,100,100)";
+      ctx.font = "10px monospace";
+      for (i = 0; i < 256; i++) {
+        ctx.fillText("0".repeat(136), 0, 10 * i);
       }
-   
-    </script>
+    }
+  </script>
 
-    <div class="h-screen p-10 bg-white dark:bg-gray-900 antialiased flex-col">
-      <div class="flex h-full">
-        <div class="relative flex justify-center items-center h-auto  rounded-xl overflow-hidden w-[70%]">
+  <div class="h-screen p-10 bg-white dark:bg-black  antialiased flex-col">
+    <div class="flex  h-full justify-center">
+      <div class="relative flex flex-col h-full w-[56%]">
+        <canvas id="flure_canvas_scaler_x" class=" w-[calc(100%_-_10px)] h-[30px]"></canvas>
+        <div class="relative flex justify-center items-center h-full rounded-xl overflow-hidden">
           <div class="relative w-full h-full object-contain object-center rounded-xl overflow-hidden">
-            <div class="absolute left-0 bottom-0 z-[99] mb-2 ml-2">
-              <button id="save-btn" type="button" disabled class="inset-0 py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200  focus:z-10 focus:ring-4 focus:ring-gray-200 ">
-                <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)">
+            <div id="flure_welcome_msg" class="flex flex-col pl-2 pt-2 h-full justify-between text-sm dark:text-white">
+              <div class="">
+                <p class="text-2xl mb-5">flure playground</p>
+                <p>a playground for "flure", a stack-based programming language</p>
+                <p>to create binary graphic (1-bit), inspired by FORTH language.</p>
+              </div>
+
+              <div class="flex flex-col text-xs pt-8">
+                <h1 class="font-bold">Guides</h1>
+                <p><code>flure</code> use reverse polish notation (RPN) eg <code>10 10 +</code> will return <code>20</code></p>
+                <li><code>x</code> and <code>y</code> correspond to x,y coordinates</li>
+                <li>arithmatics = <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
+                <li>bitwise = <code>&</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></li>
+                <li>stack = <code>pop</code>, <code>push</code>, <code>show</code></li>
+                <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term) = <code> : <function_name> &lt;...args&gt; ; </code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
+                  <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
+                  <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
+                  <li>comments = <code>( &lt;...comments&gt; )</code></li>
+                  <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code> function.</li>
+                  <li>core = (<code>-1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
+                  <div class="ml-4">
+                    <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
+                    <li><code>and</code> , <code>or</code> , <code>&gt;</code>(greater_than), <code>&lt;</code>(less_than)</li>
+                    <li><code>dup</code>(duplicate) , <code>2dup</code>(double duplicate) , <code>swap</code> , <code>rot</code>(rotate)</li>
+                    <li><code>abs</code>(absolute number)</li>
+                    <li><code>%</code>(modulo), <code>!</code>(cast to 0 or 1)</li>
+                  </div>
+                  <li>to exit = <code>bye</code></li>
+    
+                <br/>
+                <h1 class="font-bold">Examples</h1>
+                <p>each line below will computes a different results</p>
+                <p>
+                  <b>[note] current computed image size = <code>128px * 128px</code></b>
+                  (these number (<code>128</code> and <code>128</code>) can be substituted by <code>w</code> and <code>h</code>).
+                </p>
+                <br/>
+                <li><code>x y ^ 5 % !</code></li>
+                <li><code>x y + abs x y - abs 1 + ^ 2 &lt;&lt; 5 % !</code></li>
+                <li><code>x 2 * y % !</code></li>
+                <li><code>x w 2 / - w 4 / * y w 2 / - % !</code></li>
+              </div>
+
+              <div class="w-full flex space-x-6 mt-auto">
+                <span class="text-xs  text-gray-500 dark:text-gray-300 sm:text-center">MIT License, 2023, Bangkok Thailand  <a target="_blank" class="underline" href="https://github.com/karnpapon/flure">https://github.com/karnpapon/flure</a></span>
+              </div>
+            </div>
+            <!-- <div class="absolute left-0 bottom-0 z-[99] mb-3 ml-3">
+              <button id="save-btn" type="button" disabled
+                class="inset-0 py-2 px-2 text-xs font-medium focus:outline-none bg-gray-100 text-gray-400 hover:bg-gray-200 rounded-lg border border-gray-200 focus:z-10 focus:ring-4 focus:ring-gray-200">
+                <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)" />
+              </button>
+            </div> -->
+            <canvas id="flure_canvas" class="absolute z-10 rounded-lg h-full w-[calc(100%_-_10px)] object-cover  dark:bg-black" />
+            <!-- <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2" /> -->
+          </div>
+        </div>
+      </div>
+      <div class="mr-4"> 
+        <div class="-translate-y-1 flex text-xs flex-col justify-between text-gray-500 dark:text-white whitespace-nowrap">
+          <p>x axis</p>
+          <p>y axis</p>
+        </div>
+        <canvas id="flure_canvas_scaler" class="w-[30px] h-full mt-auto"></canvas>
+      </div>
+      <!-- <canvas id="flure_canvas_nav" class="w-8 max-w-[40px] mr-2 ml-2"></canvas> -->
+      <div class="flex flex-col ">
+        <div class="flex flex-1 flex-col ">
+          <div class="flex max-w-[545px] max-h-[540px] overflow-hidden rounded-lg p-2 bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600">
+            <canvas id="flure_binary_display"  class="w-[99%] h-full"/>
+          </div>
+          <div class="flex justify-center items-center p-2 bg-gray-100 dark:bg-black w-full mb-2 rounded-lg -translate-y-2 rounded-t-none z-0 border border-t-white dark:border-t-black border-gray-100 dark:border-gray-600">
+            <div class="">
+              <button id="save-btn" type="button" alt="save image (.pbm)" disabled
+                class="text-xs cursor-pointer font-medium mr-2 focus:outline-none text-gray-400 rounded-lg  focus:z-10 focus:ring-4 focus:ring-gray-200">
+                <!-- <img src="public/download.png" class="w-4 h-4" alt="save image (.pbm)" /> -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="save-btn" width="20" height="20" viewBox="0 0 20 20">
+                  <path d="M17 12v5H3v-5H1v5a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5z"/>
+                  <path d="M10 15l5-6h-4V1H9v8H5l5 6z"/>
+                </svg>
+
               </button>
             </div>
-            <canvas id="flure_canvas" class="absolute z-10 rounded-xl h-full"/>
-          </div>
+            <p class="text-xs text-gray-400 dark:text-white">.pbm (portable bitmap file format): 128px * 128px</p>
+            <!-- <p class="text-xs p-2 text-gray-400">x y | y x * x & %</p> -->
+           </div>
         </div>
-        <div class="flex flex-col pl-6">
-          <div class="flex flex-1">
-            <div class="flex flex-col text-xs">
-              <h1 class="text-xl font-bold">Guides</h1>
-              <p><code>flure</code> use reverse polish notation (RPN) eg <code>10 10 +</code> will return <code>20</code></p>
-              <li><code>x</code> and <code>y</code> correspond to x,y coordinates</li>
-              <li>arithmatics = <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></li>
-              <li>bitwise = <code>&</code>, <code>|</code>, <code>^</code>, <code>&lt;&lt;</code>, <code>&gt;&gt;</code></li>
-              <li>stack = <code>pop</code>, <code>push</code>, <code>show</code></li>
-              <li>function declaration (or <code>word</code> in <code>FORTH</code>'s term) = <code> : <function_name> &lt;...args&gt; ; </code> eg. <code> : loop 1 - dup 0 = if else loop then ; </code></li>
-                <li>compile mode = <code>:</code>, delimited compile mode = <code>;</code></li>
-                <li>basic control flow <code>&lt;case&gt; if &lt;if_case&gt; else &lt;else_case&gt; then ;</code></li>
-                <li>comments = <code>( &lt;...comments&gt; )</code></li>
-                <li><code>immediate</code>ly call a function = eg. <code> : bob 20 20 + ; immediate</code>, will return <code>40</code> without calling <code>bob</code> function.</li>
-                <li>core = (<code>-1</code> =  <code>true</code>, <code>0</code> = <code>false</code>)</li>
-                <div class="ml-4">
-                  <li><code>=</code>(equal) , <code>&lt;&gt;</code></code>(not equal)</li>
-                  <li><code>and</code> , <code>or</code> , <code>&gt;</code>(greater_than), <code>&lt;</code>(less_than)</li>
-                  <li><code>dup</code>(duplicate) , <code>2dup</code>(double duplicate) , <code>swap</code> , <code>rot</code>(rotate)</li>
-                  <li><code>abs</code>(absolute number)</li>
-                  <li><code>%</code>(modulo), <code>!</code>(cast to 0 or 1)</li>
-                </div>
-                <li>to exit = <code>bye</code></li>
-  
-              <br/>
-              <h1 class="text-xl font-bold">Examples</h1>
-              <p>each line below will computes a different results</p>
-              <p>
-                <b>[note] current computed image size = <code>128px * 128px</code></b>
-                (these number (<code>128</code> and <code>128</code>) can be substituted by <code>w</code> and <code>h</code>).
-              </p>
-              <br/>
-              <li><code>x y ^ 5 % !</code></li>
-              <li><code>x y + abs x y - abs 1 + ^ 2 &lt;&lt; 5 % !</code></li>
-              <li><code>x 2 * y % !</code></li>
-              <li><code>x w 2 / - w 4 / * y w 2 / - % !</code></li>
-            </div>
-          </div>
-  
-          <div class="repl bg-gray-100 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-[200px]">
-            <code id="flure-console"></code>
-            <div class="flure-input-container self-end w-full">
-                <label id="flure-prompt" for="flure-input">&gt;</label>
-                <textarea autofocus class="w-full" id="flure-input" rows="1" placeholder="try here, for quick tutorial: `x y ^ 5 % !` then ShiftEnter"></textarea>
-            </div>
-        </div>
-        <div class="pt-4 bottom-0 left-0 w-full dark:bg-gray-700 md:flex md:items-center md:justify-between">
-          <!-- <div id="canvas_loading" class="hidden -translate-y-2 h-[10px] text-xl">
-            <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><style>.spinner_nOfF{animation:spinner_qtyZ 2s cubic-bezier(0.36,.6,.31,1) infinite}.spinner_fVhf{animation-delay:-.5s}.spinner_piVe{animation-delay:-1s}.spinner_MSNs{animation-delay:-1.5s}@keyframes spinner_qtyZ{0%{r:0}25%{r:3px;cx:4px}50%{r:3px;cx:12px}75%{r:3px;cx:20px}100%{r:0;cx:20px}}</style><circle class="spinner_nOfF" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_fVhf" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_piVe" cx="4" cy="12" r="3"/><circle class="spinner_nOfF spinner_MSNs" cx="4" cy="12" r="3"/></svg>
-          </div> -->
-          <div class="w-full flex mt-4 space-x-6 justify-end md:mt-0">
-            <span class="text-xs  text-gray-500 dark:text-gray-300 sm:text-center">MIT License, 2023, Bangkok Thailand  <a target="_blank" class="underline" href="https://github.com/karnpapon/flure">https://github.com/karnpapon/flure</a></span>
-          </div>
-        </div>
-      </div>
 
+        <div
+          class="repl bg-gray-100 dark:bg-black border border-gray-100 dark:border-gray-600 w-full p-2 text-xs text-gray-600 rounded-md flex flex-col h-[200px] hover:border hover:border-gray-400">
+          <code id="flure-console"></code>
+          <div class="flure-input-container self-end w-full">
+            <label class="dark:text-white" id="flure-prompt" for="flure-input">&gt;</label>
+            <textarea class="w-full dark:text-white" id="flure-input" rows="1" autofocus
+              placeholder="try: `x y ^ 5 % !` then ShiftEnter, or hit `Esc` to clear a screen"></textarea>
+          </div>
+        </div>
       </div>
-      
     </div>
+  </div>
+  <script src="pbm2canvas.js" type="text/javascript"></script>
+  <script src="lua/web-cli.lua" type="application/lua" async></script>
+</body>
 
-    
-    <script src="lua/web-cli.lua" type="application/lua" async></script>
-  </body>
 </html>

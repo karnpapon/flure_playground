@@ -1,6 +1,6 @@
 const supportedFormats = ["P1", "P2"];
 
-function draw(canvas, image, current_y) {
+function draw(canvas, image) {
   let { format, height, width } = image;
   let ctx = canvas.getContext("2d");
   canvas.height = height * 6 - 20;
@@ -9,10 +9,10 @@ function draw(canvas, image, current_y) {
 
   switch (format) {
     case "P1":
-      drawPBM(ctx, image, current_y);
+      drawPBM(ctx, image);
       break;
     case "P2":
-      drawPGM(ctx, image, current_y);
+      drawPGM(ctx, image);
       break;
   }
 }
@@ -33,7 +33,6 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
       // console.log("data bin", data, y, current_y)
       for (let x = 0; x < width; x++) {
         if (x > offset_x) {
-          // console.log("data bin", data[y], x)
           if (!data[y]) return;
           if (window.theme === "dark") {
             ctx.fillStyle = data[y][x] === 0 ? "white" : "#c9c9c9";
@@ -42,8 +41,8 @@ function drawBinaryNumber(canvas, { height, width, data }, current_y) {
           }
           ctx.fillText(
             data[y][x],
-            -4.5 + (x - offset_x) * 8,
-            10 * (y - offset_y)
+            -40.5 + (x - offset_x) * 8,
+            8 * (y - offset_y)
           );
         }
       }
@@ -93,7 +92,7 @@ function drawNav(canvas, { height, width, data }, current_y) {
 //   ctx.drawImage(ctx.canvas, 0, 0, nx, ny, 0, 0, width, height);
 // }
 
-function drawPBM(ctx, { height, width, data: _data }, current_y) {
+function drawPBM(ctx, { height, width, data: _data }) {
   if (!_data) return;
   // for (let y = 0; y < current_y; y++) {
   //   for (let x = 0; x < width; x++) {
@@ -209,9 +208,8 @@ function pbm2canvas(pbmString, canvas, binary_canvas, current_y) {
   if (!canvas) {
     canvas = document.createElement("canvas");
   }
-  draw(canvas, parsed, current_y);
+  draw(canvas, parsed);
   drawBinaryNumber(binary_canvas, parsed, current_y);
   // drawNav(flure_canvas_nav, parsed, current_y);
-  // draw(canvas, parsed);
   return canvas;
 }

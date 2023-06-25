@@ -8,7 +8,7 @@ module.exports = {
         "dark-gray": "#585858",
       },
       fontSize: {
-        xxs: ["0.6rem", "20px"],
+        xxs: ["0.6rem", "12px"],
       },
     },
   },

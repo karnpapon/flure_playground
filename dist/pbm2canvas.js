@@ -2,7 +2,7 @@ const supportedFormats = ["P1", "P2"];
 
 function draw(canvas, image) {
   let { format, height, width } = image;
-  let ctx = canvas.getContext("2d");
+  let ctx = canvas.getContext("2d", { willReadFrequently: true });
   canvas.height = height * 6 - 20;
   canvas.width = width * 6;
   ctx.scale(6, 6);
@@ -96,12 +96,12 @@ function drawPBM(ctx, { height, width, data: _data }) {
   if (!_data) return;
   // for (let y = 0; y < current_y; y++) {
   //   for (let x = 0; x < width; x++) {
-  //     if (data[y] && data[y][x] === 1) {
+  //     if (_data[y] && _data[y][x] === 1) {
   //       // if (x % 2 || y % 2) {
   //       //   ctx.fillStyle = "red";
   //       //   ctx.fillRect(x + 1, y + 1, 1, 1);
   //       // }
-  //       ctx.fillStyle = data[y][x] === 1 ? "black" : "";
+  //       ctx.fillStyle = _data[y][x] === 1 ? "black" : "";
   //       ctx.fillRect(x, y, 1, 1);
   //     }
   //   }
@@ -210,6 +210,37 @@ function pbm2canvas(pbmString, canvas, binary_canvas, current_y) {
   }
   draw(canvas, parsed);
   drawBinaryNumber(binary_canvas, parsed, current_y);
+
+  // canvas.addEventListener("mousemove", function (e) {
+  //   e.preventDefault();
+  //   e.stopPropagation();
+
+  //   let mouseX = parseInt(e.clientX);
+  //   let mouseY = parseInt(e.clientY);
+  // console.log("(mouseX, mouseY) ", mouseX, mouseY);
+
+  // Put your mousemove stuff here
+  // let hit = false;
+  // for (let i = 0; i < dots.length; i++) {
+  //   let dot = dots[i];
+  //   let dx = mouseX - dot.x;
+  //   let dy = mouseY - dot.y;
+  //   if (dx * dx + dy * dy < dot.rXr) {
+  //     tipCanvas.style.left = dot.x + "px";
+  //     tipCanvas.style.top = dot.y - 40 + "px";
+  //     tipCtx.clearRect(0, 0, tipCanvas.width, tipCanvas.height);
+  //     tipCtx.fillText($(dot.tip).val(), 5, 15);
+  //     hit = true;
+  //   }
+  // }
+  // if (!hit) {
+  //   tipCanvas.style.left = "-200px";
+  // }
+  // });
+
   // drawNav(flure_canvas_nav, parsed, current_y);
   return canvas;
 }
+
+// const tipCanvas = document.getElementById("tip");
+// const tipCtx = tipCanvas.getContext("2d");

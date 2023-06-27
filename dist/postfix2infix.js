@@ -1,5 +1,5 @@
 function isOperator(char) {
-  let operators = ["^", "/", "*", "+", "-", "|", "%", "!"];
+  let operators = ["^", "/", "*", "+", "-", "|", "%", "!", "&"];
   return operators.includes(char);
 }
 

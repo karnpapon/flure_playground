@@ -211,4 +211,6 @@ function input:onkeydown(e)
     end
 end
 
+document:addEventListener("autogen", doComputeImage)
+
 _G.print("[ArrowUp/ArrowDown]: get previous terminal history\n[Ctrl+L]: to clear a console\n[Enter]: run REPL\n[ShiftEnter]: compute an 1-bit graphic image.\n\n")

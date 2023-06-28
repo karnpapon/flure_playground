@@ -1,5 +1,5 @@
 const BIN_OPS = ["+", "-", "*", "&", "|", "^", "%"];
-const UN_OPS = ["-"];
+const UN_OPS = ["-@"];
 // const UN_OPS = %i{-@ ~}
 
 function plot_wrap(obj) {
@@ -73,7 +73,7 @@ class FunctionMaker {
     let op = BIN_OPS.sample();
     let left = this.make_func(depth - 1, true);
     let right = this.make_func(depth - 1, false);
-    // OPTIONAL: left, right = [left, right].shuffle
+    // left, right = [left, right].shuffle
     return new Expression(op, left, right);
   }
 }
@@ -98,12 +98,6 @@ class PlotFn {
   }
 
   to_s() {
-    throw new Error("Subclass responsibility.");
-  }
-  inspect() {
-    throw new Error("Subclass responsibility.");
-  }
-  to_proc() {
     throw new Error("Subclass responsibility.");
   }
 
@@ -147,26 +141,13 @@ class Expression extends PlotFn {
     return true;
   }
 
-  // inspect() {
-  //   let args = [this.operator];
-  //   if (this.exp_binary) {
-  //     args.push(this.lhs);
-  //   }
-  //   args.push(this.rhs);
-  //   let args_str = args.map((arg) => arg.inspect).join(", ");
-  //   console.log("this.expressiton", this);
-  //   // return `new ${this.}(${args_str})`;
-  //   return;
-  // }
-
   to_s() {
-    if (this.binary()) {
-      return `${this.bracket(this.lhs)} ${this.operator} ${this.bracket(
-        this.rhs
-      )}`;
-    }
+    let op = this.operator.replace(/\@/, "");
 
-    return `${this.operator} ${this.bracket(this.rhs)}`;
+    if (this.binary()) {
+      return `${this.bracket(this.lhs)} ${op} ${this.bracket(this.rhs)}`;
+    }
+    return `${op}${this.bracket(this.rhs)}`;
   }
 
   bracket(plotfn) {
@@ -189,16 +170,6 @@ class Lookup extends PlotFn {
   to_s() {
     return `${this.name}`;
   }
-  inspect() {
-    return `new Lookup(${this.name.inspect()})`;
-  }
-
-  to_proc() {
-    let nm = this.name;
-    return function (context) {
-      context[nm];
-    };
-  }
 }
 
 class Literal extends PlotFn {
@@ -212,16 +183,6 @@ class Literal extends PlotFn {
   }
   to_s() {
     return `${this.value}`;
-  }
-  inspect() {
-    return `new Literal(${this.value})`;
-  }
-
-  to_proc() {
-    let v = this.value;
-    return function (context) {
-      v;
-    };
   }
 }
 

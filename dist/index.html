@@ -25,28 +25,44 @@
   <script type="module">
     import { FunctionMaker } from "./flure_gen/maker.js";
 
+    let autogen_timer
+
     Array.prototype.sample = function () {
       return this[Math.floor(Math.random() * this.length)];
     };
 
-    // setInterval(()=>{
-    // let mod_arr = Array.from(new Array(11), (x, i) => i + 2)
-    // mod_arr.push(null);
-    // let mod = mod_arr.sample();
-    // let fn = new FunctionMaker()
-    // let gen_func = fn.make(mod);
-    // let gen_func_as_flure_code = gen_func ?  rpn.infix2rpn(gen_func + "!") : "x y ^ 5 % !"
+    function generate_and_run_code(){
+      let mod_arr = Array.from(new Array(11), (x, i) => i + 2)
+      mod_arr.push(null);
+      let mod = mod_arr.sample();
+      let fn = new FunctionMaker()
+      let gen_func = fn.make(mod);
+      let gen_func_as_flure_code = gen_func ?  rpn.infix2rpn(gen_func + "!") : ["x y ^ 5 % !", "x y + abs x y - abs 1 + ^ 2 << 5 % !", "x 2 * y % !", "x w 2 / - w 4 / * y w 2 / - % !"].sample()
 
-    // let input = document.getElementById("flure-input")
-    // input.value = gen_func_as_flure_code
+      let input = document.getElementById("flure-input")
+      input.value = gen_func_as_flure_code
+    }
 
-    //   const event = new Event("autogen");
-    //   window.document.dispatchEvent(event);
-    // }, 10000)
+    document.addEventListener("autogen-on", function(){
+      generate_and_run_code()
+      const event = new Event("autogen");
+      window.document.dispatchEvent(event);
+
+      autogen_timer = setInterval(()=>{
+        generate_and_run_code()
+        const event = new Event("autogen");
+        window.document.dispatchEvent(event);
+      }, 10000)
+    })
+
+    document.addEventListener("autogen-off", function(){
+      clearTimeout(autogen_timer)
+    })
   </script>
 
   <script type="text/javascript">
     let html = document.querySelector('[data-mode]')
+    let autogen_mode = false
 
     const container = html;
     if(localStorage.getItem("flure-dark-theme")){
@@ -126,6 +142,27 @@
       }
     }
 
+    function toggleAutoGenMode(){
+      autogen_mode = !autogen_mode
+      let autogen_icon_elem = document.getElementById("autogen-icon")
+      if (autogen_mode) {
+        let ev = new Event("autogen-on")
+        window.document.dispatchEvent(ev);
+        autogen_icon_elem.innerHTML = `<svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="Media / Stop">
+          <path id="Vector" d="M5 8.2002V15.8002C5 16.9203 5 17.4796 5.21799 17.9074C5.40973 18.2837 5.71547 18.5905 6.0918 18.7822C6.5192 19 7.07899 19 8.19691 19H15.8036C16.9215 19 17.4805 19 17.9079 18.7822C18.2842 18.5905 18.5905 18.2837 18.7822 17.9074C19 17.48 19 16.921 19 15.8031V8.19691C19 7.07899 19 6.5192 18.7822 6.0918C18.5905 5.71547 18.2842 5.40973 17.9079 5.21799C17.4801 5 16.9203 5 15.8002 5H8.2002C7.08009 5 6.51962 5 6.0918 5.21799C5.71547 5.40973 5.40973 5.71547 5.21799 6.0918C5 6.51962 5 7.08009 5 8.2002Z" stroke="#a3a3a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </g>
+          </svg>`
+      } else {
+        let ev = new Event("autogen-off")
+        window.document.dispatchEvent(ev);
+        autogen_icon_elem.innerHTML = `<svg width="25px" height="25px" viewBox="0 0 256 256" fill="#a3a3a3" xmlns="http://www.w3.org/2000/svg">
+            <title>toggle auto-generate mode</title>
+            <path d="M59 61.922c0-9.768 13.016-15.432 22.352-11.615 10.695 7.017 101.643 58.238 109.869 65.076 8.226 6.838 10.585 17.695-.559 25.77-11.143 8.074-99.712 60.203-109.31 64.73-9.6 4.526-21.952-1.632-22.352-13.088-.4-11.456 0-121.106 0-130.873zm13.437 8.48c0 2.494-.076 112.852-.216 115.122-.23 3.723 3 7.464 7.5 5.245 4.5-2.22 97.522-57.704 101.216-59.141 3.695-1.438 3.45-5.1 0-7.388C177.488 121.952 82.77 67.76 80 65.38c-2.77-2.381-7.563 1.193-7.563 5.023z" stroke="#a3a3a3" fill-rule="evenodd"/>
+          </svg>`
+      }
+    }
+
     function save() {
       if (!window.flure_value) return false;
       const bb = new Blob([window.flure_value], { type: "text/plain" });
@@ -180,14 +217,26 @@
 
 <div class="h-screen p-16 bg-white dark:bg-black  antialiased flex-col">
     <div class="relative flex h-full">
-      <div class="absolute right-0 -translate-y-10 hover:opacity-50 cursor-pointer" onclick="toggleTheme()">
-        <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-          <g id="🔍-Product-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g id="ic_fluent_dark_theme_24_regular" fill="#a3a3a3" fill-rule="nonzero">
-              <path d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z" id="🎨-Color"> </path>
+      <div class="absolute flex justify-center items-center right-0 -translate-y-10 ">
+
+        <div id="autogen-icon" class="hover:opacity-50 cursor-pointer mr-2" onclick="toggleAutoGenMode()">
+          <svg width="25px" height="25px" viewBox="0 0 256 256" fill="#a3a3a3" xmlns="http://www.w3.org/2000/svg">
+            <title>toggle auto-generate mode</title>
+            <path d="M59 61.922c0-9.768 13.016-15.432 22.352-11.615 10.695 7.017 101.643 58.238 109.869 65.076 8.226 6.838 10.585 17.695-.559 25.77-11.143 8.074-99.712 60.203-109.31 64.73-9.6 4.526-21.952-1.632-22.352-13.088-.4-11.456 0-121.106 0-130.873zm13.437 8.48c0 2.494-.076 112.852-.216 115.122-.23 3.723 3 7.464 7.5 5.245 4.5-2.22 97.522-57.704 101.216-59.141 3.695-1.438 3.45-5.1 0-7.388C177.488 121.952 82.77 67.76 80 65.38c-2.77-2.381-7.563 1.193-7.563 5.023z" stroke="#979797" fill-rule="evenodd"/>
+          </svg>
+        </div>
+
+        <div class="hover:opacity-50 cursor-pointer" onclick="toggleTheme()">
+          <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <title>toggle dark/light mode</title>
+            <g id="🔍-Product-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="ic_fluent_dark_theme_24_regular" fill="#a3a3a3" fill-rule="nonzero">
+                <path d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z" id="🎨-Color"> </path>
+              </g>
             </g>
-          </g>
-        </svg>
+          </svg>
+        </div>
+
       </div>
 
       <div class="relative flex flex-col h-full w-[56%]">

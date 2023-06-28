@@ -148,7 +148,10 @@
       if (autogen_mode) {
         let ev = new Event("autogen-on")
         window.document.dispatchEvent(ev);
-        autogen_icon_elem.innerHTML = `<svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        autogen_icon_elem.innerHTML = `<div class="opacity-0 w-44 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 -bottom-[200%] -left-[300%] px-3 pointer-events-none">
+            stop auto-generate mode
+          </div>
+          <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <g id="Media / Stop">
           <path id="Vector" d="M5 8.2002V15.8002C5 16.9203 5 17.4796 5.21799 17.9074C5.40973 18.2837 5.71547 18.5905 6.0918 18.7822C6.5192 19 7.07899 19 8.19691 19H15.8036C16.9215 19 17.4805 19 17.9079 18.7822C18.2842 18.5905 18.5905 18.2837 18.7822 17.9074C19 17.48 19 16.921 19 15.8031V8.19691C19 7.07899 19 6.5192 18.7822 6.0918C18.5905 5.71547 18.2842 5.40973 17.9079 5.21799C17.4801 5 16.9203 5 15.8002 5H8.2002C7.08009 5 6.51962 5 6.0918 5.21799C5.71547 5.40973 5.40973 5.71547 5.21799 6.0918C5 6.51962 5 7.08009 5 8.2002Z" stroke="#a3a3a3" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </g>
@@ -156,9 +159,11 @@
       } else {
         let ev = new Event("autogen-off")
         window.document.dispatchEvent(ev);
-        autogen_icon_elem.innerHTML = `<svg width="25px" height="25px" viewBox="0 0 256 256" fill="#a3a3a3" xmlns="http://www.w3.org/2000/svg">
-            <title>toggle auto-generate mode</title>
-            <path d="M59 61.922c0-9.768 13.016-15.432 22.352-11.615 10.695 7.017 101.643 58.238 109.869 65.076 8.226 6.838 10.585 17.695-.559 25.77-11.143 8.074-99.712 60.203-109.31 64.73-9.6 4.526-21.952-1.632-22.352-13.088-.4-11.456 0-121.106 0-130.873zm13.437 8.48c0 2.494-.076 112.852-.216 115.122-.23 3.723 3 7.464 7.5 5.245 4.5-2.22 97.522-57.704 101.216-59.141 3.695-1.438 3.45-5.1 0-7.388C177.488 121.952 82.77 67.76 80 65.38c-2.77-2.381-7.563 1.193-7.563 5.023z" stroke="#a3a3a3" fill-rule="evenodd"/>
+        autogen_icon_elem.innerHTML = `<div class="opacity-0 w-44 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 -bottom-[200%] -left-[300%] px-3 pointer-events-none">
+            start auto-generate mode (interval: 10sec)
+          </div>
+          <svg width="25px" height="25px" viewBox="0 0 256 256" fill="#a3a3a3" xmlns="http://www.w3.org/2000/svg">
+            <path d="M59 61.922c0-9.768 13.016-15.432 22.352-11.615 10.695 7.017 101.643 58.238 109.869 65.076 8.226 6.838 10.585 17.695-.559 25.77-11.143 8.074-99.712 60.203-109.31 64.73-9.6 4.526-21.952-1.632-22.352-13.088-.4-11.456 0-121.106 0-130.873zm13.437 8.48c0 2.494-.076 112.852-.216 115.122-.23 3.723 3 7.464 7.5 5.245 4.5-2.22 97.522-57.704 101.216-59.141 3.695-1.438 3.45-5.1 0-7.388C177.488 121.952 82.77 67.76 80 65.38c-2.77-2.381-7.563 1.193-7.563 5.023z" stroke="#979797" fill-rule="evenodd"/>
           </svg>`
       }
     }
@@ -221,8 +226,7 @@
 
         <div id="autogen-icon" class="relative group hover:opacity-100 cursor-pointer mr-2" onclick="toggleAutoGenMode()">
           <div class="opacity-0 w-44 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 -bottom-[200%] -left-[300%] px-3 pointer-events-none">
-            <!-- <svg class="absolute text-black h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="0,0 127.5,127.5 255,0"/></svg> -->
-            toggle auto-generate mode (interval: 1000ms)
+            start auto-generate mode (interval: 10sec)
           </div>
           <svg width="25px" height="25px" viewBox="0 0 256 256" fill="#a3a3a3" xmlns="http://www.w3.org/2000/svg">
             <path d="M59 61.922c0-9.768 13.016-15.432 22.352-11.615 10.695 7.017 101.643 58.238 109.869 65.076 8.226 6.838 10.585 17.695-.559 25.77-11.143 8.074-99.712 60.203-109.31 64.73-9.6 4.526-21.952-1.632-22.352-13.088-.4-11.456 0-121.106 0-130.873zm13.437 8.48c0 2.494-.076 112.852-.216 115.122-.23 3.723 3 7.464 7.5 5.245 4.5-2.22 97.522-57.704 101.216-59.141 3.695-1.438 3.45-5.1 0-7.388C177.488 121.952 82.77 67.76 80 65.38c-2.77-2.381-7.563 1.193-7.563 5.023z" stroke="#979797" fill-rule="evenodd"/>

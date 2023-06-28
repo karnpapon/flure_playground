@@ -219,16 +219,21 @@
     <div class="relative flex h-full">
       <div class="absolute flex justify-center items-center right-0 -translate-y-10 ">
 
-        <div id="autogen-icon" class="hover:opacity-50 cursor-pointer mr-2" onclick="toggleAutoGenMode()">
+        <div id="autogen-icon" class="relative group hover:opacity-100 cursor-pointer mr-2" onclick="toggleAutoGenMode()">
+          <div class="opacity-0 w-44 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 -bottom-[200%] -left-[300%] px-3 pointer-events-none">
+            <!-- <svg class="absolute text-black h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255" xml:space="preserve"><polygon class="fill-current" points="0,0 127.5,127.5 255,0"/></svg> -->
+            toggle auto-generate mode (interval: 1000ms)
+          </div>
           <svg width="25px" height="25px" viewBox="0 0 256 256" fill="#a3a3a3" xmlns="http://www.w3.org/2000/svg">
-            <title>toggle auto-generate mode</title>
             <path d="M59 61.922c0-9.768 13.016-15.432 22.352-11.615 10.695 7.017 101.643 58.238 109.869 65.076 8.226 6.838 10.585 17.695-.559 25.77-11.143 8.074-99.712 60.203-109.31 64.73-9.6 4.526-21.952-1.632-22.352-13.088-.4-11.456 0-121.106 0-130.873zm13.437 8.48c0 2.494-.076 112.852-.216 115.122-.23 3.723 3 7.464 7.5 5.245 4.5-2.22 97.522-57.704 101.216-59.141 3.695-1.438 3.45-5.1 0-7.388C177.488 121.952 82.77 67.76 80 65.38c-2.77-2.381-7.563 1.193-7.563 5.023z" stroke="#979797" fill-rule="evenodd"/>
           </svg>
         </div>
 
-        <div class="hover:opacity-50 cursor-pointer" onclick="toggleTheme()">
+        <div class="relative group hover:opacity-100 cursor-pointer" onclick="toggleTheme()">
+          <div class="opacity-0 w-28 bg-black text-white text-center text-xs rounded-lg py-2 absolute z-10 group-hover:opacity-100 -bottom-[260%] -left-[150%] px-3 pointer-events-none">
+             dark/light theme
+          </div>
           <svg width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-            <title>toggle dark/light mode</title>
             <g id="🔍-Product-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
               <g id="ic_fluent_dark_theme_24_regular" fill="#a3a3a3" fill-rule="nonzero">
                 <path d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z" id="🎨-Color"> </path>
